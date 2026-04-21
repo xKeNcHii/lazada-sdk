@@ -42,7 +42,7 @@
     "prepublishOnly": "pnpm gen:types && pnpm build"
   },
   "dependencies": {
-    "openapi-fetch": "^0.13.5"
+    "openapi-fetch": "^0.17.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
