@@ -24,10 +24,6 @@ export class ReturnAndRefundManager extends BaseManager {
     return this.client.GET("/order/reverse/reason/list", { params: { query: params } });
   }
 
-  getReverseGetreverseordersforseller(params: Q<"/reverse/getreverseordersforseller", "get">) {
-    return this.client.GET("/reverse/getreverseordersforseller", { params: { query: params } });
-  }
-
   postReverseGetreverseordersforseller(body: B<"/reverse/getreverseordersforseller", "post">) {
     return this.client.POST("/reverse/getreverseordersforseller", { body });
   }

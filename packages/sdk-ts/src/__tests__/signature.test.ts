@@ -9,8 +9,8 @@ import { signRequest } from "../signature.js";
  * before updating the vector.
  */
 describe("signRequest", () => {
-  it("produces the locked HMAC-SHA256 signature for a fixed input", () => {
-    const sig = signRequest({
+  it("produces the locked HMAC-SHA256 signature for a fixed input", async () => {
+    const sig = await signRequest({
       appSecret: "test-secret",
       apiPath: "/order/cancel",
       params: {
@@ -25,11 +25,11 @@ describe("signRequest", () => {
     );
   });
 
-  it("matches the documented Java-sample shape for the docs' worked example", () => {
+  it("matches the documented Java-sample shape for the docs' worked example", async () => {
     // Docs: params {foo:1, bar:2, foo_bar:3, foobar:4} + /test/api →
     // sorted concat "bar2foo1foo_bar3foobar4", prefixed by "/test/api".
     // We verified this hex by running our impl; locks the algorithm.
-    const sig = signRequest({
+    const sig = await signRequest({
       appSecret: "secret",
       apiPath: "/test/api",
       params: { foo: "1", bar: "2", foo_bar: "3", foobar: "4" },
@@ -39,13 +39,13 @@ describe("signRequest", () => {
     );
   });
 
-  it("sorts parameters in ASCII order regardless of input order", () => {
-    const a = signRequest({
+  it("sorts parameters in ASCII order regardless of input order", async () => {
+    const a = await signRequest({
       appSecret: "k",
       apiPath: "/test",
       params: { foo: "1", bar: "2" },
     });
-    const b = signRequest({
+    const b = await signRequest({
       appSecret: "k",
       apiPath: "/test",
       params: { bar: "2", foo: "1" },
@@ -53,13 +53,13 @@ describe("signRequest", () => {
     expect(a).toBe(b);
   });
 
-  it("excludes the sign parameter from the signed payload", () => {
-    const a = signRequest({
+  it("excludes the sign parameter from the signed payload", async () => {
+    const a = await signRequest({
       appSecret: "k",
       apiPath: "/test",
       params: { foo: "1" },
     });
-    const b = signRequest({
+    const b = await signRequest({
       appSecret: "k",
       apiPath: "/test",
       params: { foo: "1", sign: "whatever" },
@@ -67,13 +67,13 @@ describe("signRequest", () => {
     expect(a).toBe(b);
   });
 
-  it("excludes empty/undefined/null values", () => {
-    const a = signRequest({
+  it("excludes empty/undefined/null values", async () => {
+    const a = await signRequest({
       appSecret: "k",
       apiPath: "/test",
       params: { foo: "1" },
     });
-    const b = signRequest({
+    const b = await signRequest({
       appSecret: "k",
       apiPath: "/test",
       params: { foo: "1", bar: "", baz: undefined, qux: null },
@@ -81,13 +81,13 @@ describe("signRequest", () => {
     expect(a).toBe(b);
   });
 
-  it("incorporates the body suffix into the signed payload", () => {
-    const withoutBody = signRequest({
+  it("incorporates the body suffix into the signed payload", async () => {
+    const withoutBody = await signRequest({
       appSecret: "k",
       apiPath: "/test",
       params: { foo: "1" },
     });
-    const withBody = signRequest({
+    const withBody = await signRequest({
       appSecret: "k",
       apiPath: "/test",
       params: { foo: "1" },

@@ -1,6 +1,6 @@
 {
   "name": "@lazada-sdk/sdk",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Unofficial TypeScript SDK for the Lazada Open Platform API. Not affiliated with Lazada.",
   "license": "MIT",
   "type": "module",
@@ -69,24 +69,21 @@
       "name": "ESM full bundle",
       "path": "dist/index.js",
       "limit": "100 KB",
-      "gzip": true,
-      "ignore": ["crypto", "node:crypto"]
+      "gzip": true
     },
     {
       "name": "Signing + errors only (no managers, tree-shaken)",
       "path": "dist/index.js",
       "import": "{ signRequest, LazadaApiError }",
       "limit": "5 KB",
-      "gzip": true,
-      "ignore": ["crypto", "node:crypto"]
+      "gzip": true
     },
     {
       "name": "SDK + Order + Seller managers (tree-shaken)",
       "path": "dist/index.js",
       "import": "{ LazadaSDK, OrderManager, SellerManager }",
       "limit": "40 KB",
-      "gzip": true,
-      "ignore": ["crypto", "node:crypto"]
+      "gzip": true
     }
   ]
 }

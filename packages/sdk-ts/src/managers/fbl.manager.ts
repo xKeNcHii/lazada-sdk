@@ -28,10 +28,6 @@ export class FblManager extends BaseManager {
     return this.client.POST("/fbl/outbound_order/cancel", { body });
   }
 
-  getFblVasCancelvasorder(params: Q<"/fbl/vas/cancelVasOrder", "get">) {
-    return this.client.GET("/fbl/vas/cancelVasOrder", { params: { query: params } });
-  }
-
   postFblVasCancelvasorder(body: B<"/fbl/vas/cancelVasOrder", "post">) {
     return this.client.POST("/fbl/vas/cancelVasOrder", { body });
   }
@@ -40,7 +36,7 @@ export class FblManager extends BaseManager {
     return this.client.POST("/fbl/inbound_order/cancel", { body });
   }
 
-  getFblInboundReservationCheck(params: Q<"/fbl/inbound_reservation/check", "get">) {
+  checkFblInboundReservation(params: Q<"/fbl/inbound_reservation/check", "get">) {
     return this.client.GET("/fbl/inbound_reservation/check", { params: { query: params } });
   }
 
@@ -76,10 +72,6 @@ export class FblManager extends BaseManager {
     return this.client.POST("/fbl/product_reinbound/create", { body });
   }
 
-  getFblVasCreatevasorder(params: Q<"/fbl/vas/createVasOrder", "get">) {
-    return this.client.GET("/fbl/vas/createVasOrder", { params: { query: params } });
-  }
-
   postFblVasCreatevasorder(body: B<"/fbl/vas/createVasOrder", "post">) {
     return this.client.POST("/fbl/vas/createVasOrder", { body });
   }
@@ -96,32 +88,16 @@ export class FblManager extends BaseManager {
     return this.client.GET("/fbl/fulfillment_sku_list/get", { params: { query: params } });
   }
 
-  getFblFulfillmentSkuRelationGetByScItem(params: Q<"/fbl/fulfillment_sku_relation/get_by_sc_item", "get">) {
-    return this.client.GET("/fbl/fulfillment_sku_relation/get_by_sc_item", { params: { query: params } });
-  }
-
   postFblFulfillmentSkuRelationGetByScItem(body: B<"/fbl/fulfillment_sku_relation/get_by_sc_item", "post">) {
     return this.client.POST("/fbl/fulfillment_sku_relation/get_by_sc_item", { body });
-  }
-
-  getFblFulfillmentSkuRelationGetBySku(params: Q<"/fbl/fulfillment_sku_relation/get_by_sku", "get">) {
-    return this.client.GET("/fbl/fulfillment_sku_relation/get_by_sku", { params: { query: params } });
   }
 
   postFblFulfillmentSkuRelationGetBySku(body: B<"/fbl/fulfillment_sku_relation/get_by_sku", "post">) {
     return this.client.POST("/fbl/fulfillment_sku_relation/get_by_sku", { body });
   }
 
-  getFblFulfillmentSkuRelationGetByScItems(params: Q<"/fbl/fulfillment_sku_relation/get_by_sc_items", "get">) {
-    return this.client.GET("/fbl/fulfillment_sku_relation/get_by_sc_items", { params: { query: params } });
-  }
-
   postFblFulfillmentSkuRelationGetByScItems(body: B<"/fbl/fulfillment_sku_relation/get_by_sc_items", "post">) {
     return this.client.POST("/fbl/fulfillment_sku_relation/get_by_sc_items", { body });
-  }
-
-  getFblFulfillmentSkuRelationGetBySkus(params: Q<"/fbl/fulfillment_sku_relation/get_by_skus", "get">) {
-    return this.client.GET("/fbl/fulfillment_sku_relation/get_by_skus", { params: { query: params } });
   }
 
   postFblFulfillmentSkuRelationGetBySkus(body: B<"/fbl/fulfillment_sku_relation/get_by_skus", "post">) {
@@ -176,10 +152,6 @@ export class FblManager extends BaseManager {
     return this.client.GET("/fbl/stock_rule/get", { params: { query: params } });
   }
 
-  getFblVasGetvasorderbyno(params: Q<"/fbl/vas/getVasOrderByNo", "get">) {
-    return this.client.GET("/fbl/vas/getVasOrderByNo", { params: { query: params } });
-  }
-
   postFblVasGetvasorderbyno(body: B<"/fbl/vas/getVasOrderByNo", "post">) {
     return this.client.POST("/fbl/vas/getVasOrderByNo", { body });
   }
@@ -232,11 +204,7 @@ export class FblManager extends BaseManager {
     return this.client.POST("/fbl/fulfillment_sku/update", { body });
   }
 
-  uploadFblWaybill(params: Q<"/fbl/waybill/upload", "get">) {
-    return this.client.GET("/fbl/waybill/upload", { params: { query: params } });
-  }
-
-  uploadFblWaybill_2(body: B<"/fbl/waybill/upload", "post">) {
+  uploadFblWaybill(body: B<"/fbl/waybill/upload", "post">) {
     return this.client.POST("/fbl/waybill/upload", { body });
   }
 

@@ -98,7 +98,7 @@ export function createLazadaClient(
         if (token) urlParams.access_token = token;
       }
 
-      urlParams.sign = signRequest({
+      urlParams.sign = await signRequest({
         appSecret: config.appSecret,
         apiPath,
         params: { ...urlParams, ...formFields },

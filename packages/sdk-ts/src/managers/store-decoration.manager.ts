@@ -12,11 +12,7 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class StoreDecorationManager extends BaseManager {
-  getStoreCustomPage(params: Q<"/store/custom/page/get", "get">) {
-    return this.client.GET("/store/custom/page/get", { params: { query: params } });
-  }
-
-  getStoreCustomPage_2(body: B<"/store/custom/page/get", "post">) {
+  getStoreCustomPage(body: B<"/store/custom/page/get", "post">) {
     return this.client.POST("/store/custom/page/get", { body });
   }
 

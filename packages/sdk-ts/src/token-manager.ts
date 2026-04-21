@@ -130,7 +130,7 @@ export class TokenManager {
       timestamp: Date.now().toString(),
       sign_method: "sha256",
     };
-    params.sign = signRequest({
+    params.sign = await signRequest({
       appSecret: this.opts.appSecret,
       apiPath,
       params,

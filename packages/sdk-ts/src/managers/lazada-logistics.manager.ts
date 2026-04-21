@@ -12,10 +12,6 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class LazadaLogisticsManager extends BaseManager {
-  getLogisticsEpisCustomersExternalRelationshipsBundle(params: Q<"/logistics/epis/customers/external_relationships_bundle", "get">) {
-    return this.client.GET("/logistics/epis/customers/external_relationships_bundle", { params: { query: params } });
-  }
-
   postLogisticsEpisCustomersExternalRelationshipsBundle(body: B<"/logistics/epis/customers/external_relationships_bundle", "post">) {
     return this.client.POST("/logistics/epis/customers/external_relationships_bundle", { body });
   }
@@ -80,32 +76,16 @@ export class LazadaLogisticsManager extends BaseManager {
     return this.client.POST("/logistics/epis/xspace/detail", { body });
   }
 
-  queryLogisticsEpisXspace(params: Q<"/logistics/epis/xspace/query", "get">) {
-    return this.client.GET("/logistics/epis/xspace/query", { params: { query: params } });
-  }
-
-  queryLogisticsEpisXspace_2(body: B<"/logistics/epis/xspace/query", "post">) {
+  queryLogisticsEpisXspace(body: B<"/logistics/epis/xspace/query", "post">) {
     return this.client.POST("/logistics/epis/xspace/query", { body });
-  }
-
-  getLogisticsEpisXspaceRate(params: Q<"/logistics/epis/xspace/rate", "get">) {
-    return this.client.GET("/logistics/epis/xspace/rate", { params: { query: params } });
   }
 
   postLogisticsEpisXspaceRate(body: B<"/logistics/epis/xspace/rate", "post">) {
     return this.client.POST("/logistics/epis/xspace/rate", { body });
   }
 
-  getLogisticsEpisEstimateShippingFee(params: Q<"/logistics/epis/estimate_shipping_fee", "get">) {
-    return this.client.GET("/logistics/epis/estimate_shipping_fee", { params: { query: params } });
-  }
-
   postLogisticsEpisEstimateShippingFee(body: B<"/logistics/epis/estimate_shipping_fee", "post">) {
     return this.client.POST("/logistics/epis/estimate_shipping_fee", { body });
-  }
-
-  getLogisticsEpisGetShippingFee(params: Q<"/logistics/epis/get_shipping_fee", "get">) {
-    return this.client.GET("/logistics/epis/get_shipping_fee", { params: { query: params } });
   }
 
   postLogisticsEpisGetShippingFee(body: B<"/logistics/epis/get_shipping_fee", "post">) {

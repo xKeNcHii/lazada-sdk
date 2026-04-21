@@ -12,19 +12,11 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class ServiceMarketManager extends BaseManager {
-  queryServiceMarketOrder(params: Q<"/service/market/order/query", "get">) {
-    return this.client.GET("/service/market/order/query", { params: { query: params } });
-  }
-
-  queryServiceMarketOrder_2(body: B<"/service/market/order/query", "post">) {
+  queryServiceMarketOrder(body: B<"/service/market/order/query", "post">) {
     return this.client.POST("/service/market/order/query", { body });
   }
 
-  queryServiceMarketSubs(params: Q<"/service/market/subs/query", "get">) {
-    return this.client.GET("/service/market/subs/query", { params: { query: params } });
-  }
-
-  queryServiceMarketSubs_2(body: B<"/service/market/subs/query", "post">) {
+  queryServiceMarketSubs(body: B<"/service/market/subs/query", "post">) {
     return this.client.POST("/service/market/subs/query", { body });
   }
 

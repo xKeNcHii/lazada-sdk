@@ -24,15 +24,11 @@ export class FulfillmentManager extends BaseManager {
     return this.client.POST("/order/package/sof/failed_delivery", { body });
   }
 
-  getOrderShipmentProviders(params: Q<"/order/shipment/providers/get", "get">) {
-    return this.client.GET("/order/shipment/providers/get", { params: { query: params } });
-  }
-
-  getOrderShipmentProviders_2(body: B<"/order/shipment/providers/get", "post">) {
+  getOrderShipmentProviders(body: B<"/order/shipment/providers/get", "post">) {
     return this.client.POST("/order/shipment/providers/get", { body });
   }
 
-  postOrderFulfillPack(body: B<"/order/fulfill/pack", "post">) {
+  packOrderFulfill(body: B<"/order/fulfill/pack", "post">) {
     return this.client.POST("/order/fulfill/pack", { body });
   }
 
@@ -40,20 +36,12 @@ export class FulfillmentManager extends BaseManager {
     return this.client.POST("/order/package/sof/status/update", { body });
   }
 
-  getOrderPackageDocument(params: Q<"/order/package/document/get", "get">) {
-    return this.client.GET("/order/package/document/get", { params: { query: params } });
-  }
-
-  getOrderPackageDocument_2(body: B<"/order/package/document/get", "post">) {
+  getOrderPackageDocument(body: B<"/order/package/document/get", "post">) {
     return this.client.POST("/order/package/document/get", { body });
   }
 
   postOrderPackageRts(body: B<"/order/package/rts", "post">) {
     return this.client.POST("/order/package/rts", { body });
-  }
-
-  getOrderPackageRepack(params: Q<"/order/package/repack", "get">) {
-    return this.client.GET("/order/package/repack", { params: { query: params } });
   }
 
   postOrderPackageRepack(body: B<"/order/package/repack", "post">) {

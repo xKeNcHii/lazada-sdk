@@ -12,10 +12,6 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class ChoiceCustomizedManager extends BaseManager {
-  getJitPurchaseOrderBatchPickupDeliver(params: Q<"/jit/purchase_order/batch_pickup_deliver", "get">) {
-    return this.client.GET("/jit/purchase_order/batch_pickup_deliver", { params: { query: params } });
-  }
-
   postJitPurchaseOrderBatchPickupDeliver(body: B<"/jit/purchase_order/batch_pickup_deliver", "post">) {
     return this.client.POST("/jit/purchase_order/batch_pickup_deliver", { body });
   }
@@ -28,24 +24,12 @@ export class ChoiceCustomizedManager extends BaseManager {
     return this.client.GET("/choice/product/item/get", { params: { query: params } });
   }
 
-  getChoiceProducts(params: Q<"/choice/products/get", "get">) {
-    return this.client.GET("/choice/products/get", { params: { query: params } });
-  }
-
-  getChoiceProducts_2(body: B<"/choice/products/get", "post">) {
+  getChoiceProducts(body: B<"/choice/products/get", "post">) {
     return this.client.POST("/choice/products/get", { body });
   }
 
-  getChoiceSeller(params: Q<"/choice/seller/get", "get">) {
-    return this.client.GET("/choice/seller/get", { params: { query: params } });
-  }
-
-  getChoiceSeller_2(body: B<"/choice/seller/get", "post">) {
+  getChoiceSeller(body: B<"/choice/seller/get", "post">) {
     return this.client.POST("/choice/seller/get", { body });
-  }
-
-  getChoiceSkuItemRelationGetBySku(params: Q<"/choice/sku_item_relation/get_by_sku", "get">) {
-    return this.client.GET("/choice/sku_item_relation/get_by_sku", { params: { query: params } });
   }
 
   postChoiceSkuItemRelationGetBySku(body: B<"/choice/sku_item_relation/get_by_sku", "post">) {
@@ -56,43 +40,23 @@ export class ChoiceCustomizedManager extends BaseManager {
     return this.client.POST("/jit/purchase_order/package", { body });
   }
 
-  getJitPurchaseOrderPrint(params: Q<"/jit/purchase_order/print", "get">) {
-    return this.client.GET("/jit/purchase_order/print", { params: { query: params } });
-  }
-
-  postJitPurchaseOrderPrint(body: B<"/jit/purchase_order/print", "post">) {
+  printJitPurchaseOrder(body: B<"/jit/purchase_order/print", "post">) {
     return this.client.POST("/jit/purchase_order/print", { body });
   }
 
-  getPickupOrderPrint(params: Q<"/pickup_order/print", "get">) {
-    return this.client.GET("/pickup_order/print", { params: { query: params } });
-  }
-
-  postPickupOrderPrint(body: B<"/pickup_order/print", "post">) {
+  printPickupOrder(body: B<"/pickup_order/print", "post">) {
     return this.client.POST("/pickup_order/print", { body });
-  }
-
-  getJitPurchaseOrderQueryList(params: Q<"/jit/purchase_order/query_list", "get">) {
-    return this.client.GET("/jit/purchase_order/query_list", { params: { query: params } });
   }
 
   postJitPurchaseOrderQueryList(body: B<"/jit/purchase_order/query_list", "post">) {
     return this.client.POST("/jit/purchase_order/query_list", { body });
   }
 
-  getJitPurchaseOrderQueryListPurchaseItem(params: Q<"/jit/purchase_order/query_list_purchase_item", "get">) {
-    return this.client.GET("/jit/purchase_order/query_list_purchase_item", { params: { query: params } });
-  }
-
   postJitPurchaseOrderQueryListPurchaseItem(body: B<"/jit/purchase_order/query_list_purchase_item", "post">) {
     return this.client.POST("/jit/purchase_order/query_list_purchase_item", { body });
   }
 
-  queryPickupOrder(params: Q<"/pickup_order/query", "get">) {
-    return this.client.GET("/pickup_order/query", { params: { query: params } });
-  }
-
-  queryPickupOrder_2(body: B<"/pickup_order/query", "post">) {
+  queryPickupOrder(body: B<"/pickup_order/query", "post">) {
     return this.client.POST("/pickup_order/query", { body });
   }
 

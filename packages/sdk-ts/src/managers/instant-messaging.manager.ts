@@ -24,19 +24,11 @@ export class InstantMessagingManager extends BaseManager {
     return this.client.GET("/im/session/list", { params: { query: params } });
   }
 
-  getImMessageRecall(params: Q<"/im/message/recall", "get">) {
-    return this.client.GET("/im/message/recall", { params: { query: params } });
-  }
-
   postImMessageRecall(body: B<"/im/message/recall", "post">) {
     return this.client.POST("/im/message/recall", { body });
   }
 
-  getImSessionOpen(params: Q<"/im/session/open", "get">) {
-    return this.client.GET("/im/session/open", { params: { query: params } });
-  }
-
-  postImSessionOpen(body: B<"/im/session/open", "post">) {
+  openImSession(body: B<"/im/session/open", "post">) {
     return this.client.POST("/im/session/open", { body });
   }
 
@@ -44,7 +36,7 @@ export class InstantMessagingManager extends BaseManager {
     return this.client.POST("/im/session/read", { body });
   }
 
-  postImMessageSend(body: B<"/im/message/send", "post">) {
+  sendImMessage(body: B<"/im/message/send", "post">) {
     return this.client.POST("/im/message/send", { body });
   }
 

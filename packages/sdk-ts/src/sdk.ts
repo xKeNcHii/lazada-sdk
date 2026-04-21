@@ -1,6 +1,5 @@
 import { createLazadaClient, type LazadaClient } from "./client.js";
 import type { LazadaConfig } from "./config.js";
-import { TokenManager } from "./token-manager.js";
 import { ChoiceCustomizedManager } from "./managers/choice-customized.manager.js";
 import { ContentManager } from "./managers/content.manager.js";
 import { CrossBoarderProductManager } from "./managers/cross-boarder-product.manager.js";
@@ -37,7 +36,6 @@ import { SystemManager } from "./managers/system.manager.js";
 
 export class LazadaSDK {
   readonly client: LazadaClient;
-  readonly tokenManager: TokenManager;
   readonly choiceCustomized: ChoiceCustomizedManager;
   readonly content: ContentManager;
   readonly crossBoarderProduct: CrossBoarderProductManager;
@@ -73,22 +71,7 @@ export class LazadaSDK {
   readonly system: SystemManager;
 
   constructor(public readonly config: LazadaConfig) {
-    this.tokenManager = new TokenManager({
-      appKey: config.appKey,
-      appSecret: config.appSecret,
-      ...(config.accessToken !== undefined ? { accessToken: config.accessToken } : {}),
-      ...(config.refreshToken !== undefined ? { refreshToken: config.refreshToken } : {}),
-      ...(config.tokenExpiresAt !== undefined ? { tokenExpiresAt: config.tokenExpiresAt } : {}),
-      ...(config.storage !== undefined ? { storage: config.storage } : {}),
-      ...(config.storageKey !== undefined ? { storageKey: config.storageKey } : {}),
-      ...(config.refreshBufferSec !== undefined
-        ? { refreshBufferSec: config.refreshBufferSec }
-        : {}),
-      ...(config.authBaseUrlOverride !== undefined
-        ? { authBaseUrl: config.authBaseUrlOverride }
-        : {}),
-    });
-    this.client = createLazadaClient(config, this.tokenManager);
+    this.client = createLazadaClient(config);
     this.choiceCustomized = new ChoiceCustomizedManager(this.client);
     this.content = new ContentManager(this.client);
     this.crossBoarderProduct = new CrossBoarderProductManager(this.client);

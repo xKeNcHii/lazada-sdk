@@ -12,7 +12,7 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class FreeShippingManager extends BaseManager {
-  postPromotionFreeshippingActivate(body: B<"/promotion/freeshipping/activate", "post">) {
+  activatePromotionFreeshipping(body: B<"/promotion/freeshipping/activate", "post">) {
     return this.client.POST("/promotion/freeshipping/activate", { body });
   }
 
@@ -24,7 +24,7 @@ export class FreeShippingManager extends BaseManager {
     return this.client.POST("/promotion/freeshipping/create", { body });
   }
 
-  postPromotionFreeshippingDeactivate(body: B<"/promotion/freeshipping/deactivate", "post">) {
+  deactivatePromotionFreeshipping(body: B<"/promotion/freeshipping/deactivate", "post">) {
     return this.client.POST("/promotion/freeshipping/deactivate", { body });
   }
 

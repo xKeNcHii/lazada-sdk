@@ -20,10 +20,6 @@ export class FinanceManager extends BaseManager {
     return this.client.POST("/finance/transaction/accountTransactions/query", { body });
   }
 
-  getLbsSlbQuerylogisticsfeedetail(params: Q<"/lbs/slb/queryLogisticsFeeDetail", "get">) {
-    return this.client.GET("/lbs/slb/queryLogisticsFeeDetail", { params: { query: params } });
-  }
-
   postLbsSlbQuerylogisticsfeedetail(body: B<"/lbs/slb/queryLogisticsFeeDetail", "post">) {
     return this.client.POST("/lbs/slb/queryLogisticsFeeDetail", { body });
   }

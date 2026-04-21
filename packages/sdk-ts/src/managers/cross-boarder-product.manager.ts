@@ -24,11 +24,7 @@ export class CrossBoarderProductManager extends BaseManager {
     return this.client.GET("/product/global/status/get", { params: { query: params } });
   }
 
-  getProductGlobalSemiRecommendPrice(params: Q<"/product/global/semi/recommend/price/get", "get">) {
-    return this.client.GET("/product/global/semi/recommend/price/get", { params: { query: params } });
-  }
-
-  getProductGlobalSemiRecommendPrice_2(body: B<"/product/global/semi/recommend/price/get", "post">) {
+  getProductGlobalSemiRecommendPrice(body: B<"/product/global/semi/recommend/price/get", "post">) {
     return this.client.POST("/product/global/semi/recommend/price/get", { body });
   }
 
@@ -36,20 +32,12 @@ export class CrossBoarderProductManager extends BaseManager {
     return this.client.GET("/product/global/unfilled/attribute/get", { params: { query: params } });
   }
 
-  getProductGlobalSemiAvaible(params: Q<"/product/global/semi/avaible/get", "get">) {
-    return this.client.GET("/product/global/semi/avaible/get", { params: { query: params } });
-  }
-
-  getProductGlobalSemiAvaible_2(body: B<"/product/global/semi/avaible/get", "post">) {
+  getProductGlobalSemiAvaible(body: B<"/product/global/semi/avaible/get", "post">) {
     return this.client.POST("/product/global/semi/avaible/get", { body });
   }
 
   updateProductGlobalSemi(body: B<"/product/global/semi/update", "post">) {
     return this.client.POST("/product/global/semi/update", { body });
-  }
-
-  getProductGlobalSemiUpgrade(params: Q<"/product/global/semi/upgrade", "get">) {
-    return this.client.GET("/product/global/semi/upgrade", { params: { query: params } });
   }
 
   postProductGlobalSemiUpgrade(body: B<"/product/global/semi/upgrade", "post">) {
