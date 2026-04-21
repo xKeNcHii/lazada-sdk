@@ -1,28 +1,116 @@
 # lazada-sdk
 
-Unofficial TypeScript SDK for the Lazada Open Platform API — derived from the public docs, built as a pnpm monorepo of a markdown→OpenAPI parser (`@lazada-sdk/spec`) and a runtime SDK (`@lazada-sdk/sdk`).
+[![CI](https://github.com/xKeNcHii/lazada-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/xKeNcHii/lazada-sdk/actions/workflows/ci.yml)
+[![npm @lazada-sdk/sdk](https://img.shields.io/npm/v/@lazada-sdk/sdk?label=%40lazada-sdk%2Fsdk)](https://www.npmjs.com/package/@lazada-sdk/sdk)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Not affiliated with Lazada. See [plan](./docs/PLAN.md) (if checked in) for architecture.
+Unofficial TypeScript SDK for the [Lazada Open Platform](https://open.lazada.com/) API. Derived end-to-end from the public developer documentation: a Python scraper mirrors the docs into markdown, a TypeScript parser turns them into OpenAPI 3.1, and the SDK's types + manager classes are generated from that spec. Every spec refresh regenerates cleanly — no hand-maintained wrappers to drift out of sync.
 
-## Quick start
-
-```bash
-pnpm install
-pnpm spec:build          # parse docs/ → spec/openapi/lazada.openapi.yaml
-pnpm --filter @lazada-sdk/sdk gen:types
-pnpm -r build
-```
-
-## Layout
-
-- `scraper/` — Python scraper that fetches and converts Lazada's docs to markdown.
-- `docs/` — scraped markdown (local mirror; not published on npm).
-- `spec/` — parser that converts `docs/api/*.md` → OpenAPI 3.1 YAML.
-- `packages/sdk-ts/` — TypeScript SDK; types are generated from the OpenAPI spec, managers are hand-written name-mapping wrappers.
+> **Not affiliated with Lazada.** Use at your own risk; respect Lazada's [terms](https://open.lazada.com/). Credentials are your responsibility.
 
 ## Status
 
-v0.0.1 scaffolding. The signing layer, OpenAPI emission, and a few example managers (Order, Seller, System) are wired up. Remaining managers are bootstrapped from the spec in a follow-up pass.
+**v0.1.0-alpha.** Plumbing validated against the live Lazada SG production API on 2026-04-21 — signing, regional routing, GET query and POST form-body signing, error decoding, and generated-manager method dispatch all confirmed with real seller credentials. The full 367-method surface has **not** been exercised end-to-end; treat any specific endpoint as unverified until you've called it yourself. Breaking changes possible before v1.0.
+
+See [packages/sdk-ts/README.md](packages/sdk-ts/README.md) for the SDK's own changelog and caveats.
+
+## For SDK users
+
+Install the runtime package:
+
+```bash
+npm install @lazada-sdk/sdk
+# or
+pnpm add @lazada-sdk/sdk
+```
+
+Minimal usage:
+
+```ts
+import { LazadaSDK } from "@lazada-sdk/sdk";
+
+const sdk = new LazadaSDK({
+  appKey: process.env.LAZADA_APP_KEY!,
+  appSecret: process.env.LAZADA_APP_SECRET!,
+  region: "SG",
+  accessToken: process.env.LAZADA_ACCESS_TOKEN!,
+});
+
+const { data, error } = await sdk.seller.getSeller();
+if (error) throw error;
+console.log(data);
+```
+
+Runs on Node ≥ 20, Cloudflare Workers, Vercel Edge, Deno, and modern browsers (signing uses WebCrypto, no `node:crypto` dependency).
+
+Full docs: **[packages/sdk-ts/README.md](packages/sdk-ts/README.md)** — covers manager catalog, GET/POST duality, token refresh, pagination, error taxonomy, and bundle-size budgets.
+
+## Repo layout
+
+```
+.
+├── scraper/            Python scraper: fetches https://open.lazada.com docs → docs/api/*.md
+├── docs/               Scraped markdown mirror (local only; not published)
+├── spec/               @lazada-sdk/spec (private) — markdown → OpenAPI 3.1 parser
+│   ├── src/parse-docs.ts         markdown → OpenAPI emission
+│   ├── src/bootstrap-managers.ts OpenAPI → TypeScript manager classes
+│   └── openapi/lazada.openapi.yaml
+├── packages/sdk-ts/    @lazada-sdk/sdk — the published runtime SDK
+│   ├── src/signature.ts          WebCrypto HMAC-SHA256 signing
+│   ├── src/client.ts             openapi-fetch middleware (routing, signing, error)
+│   ├── src/token-manager.ts      OAuth refresh with in-flight coalescing
+│   ├── src/managers/*.manager.ts Auto-generated from spec
+│   └── src/schemas/generated.ts  Auto-generated types from OpenAPI
+├── examples/           Runnable smoke + task-oriented examples
+├── CONTRIBUTING.md     Scrape → parse → bootstrap regeneration loop
+└── release-please-config.json    Automated semver releases for @lazada-sdk/sdk
+```
+
+Only `@lazada-sdk/sdk` is published to npm. `@lazada-sdk/spec` is a dev-only build tool.
+
+## How the pipeline works
+
+```
+Lazada docs site  ──(Python scraper)─→  docs/api/*.md
+                                              │
+                           (markdown parser)  ▼
+                          spec/openapi/lazada.openapi.yaml  ◄── single source of truth
+                                              │
+                         ┌────────────────────┴────────────────────┐
+                         ▼                                         ▼
+                openapi-typescript                         bootstrap-managers.ts
+                         │                                         │
+                         ▼                                         ▼
+            packages/sdk-ts/src/schemas/           packages/sdk-ts/src/managers/
+                 generated.ts (types)                   *.manager.ts (classes)
+```
+
+The SDK imports types + classes; everything downstream of the OpenAPI spec is regenerable from it. When Lazada publishes new endpoints, re-run the scraper → parse → gen:types → bootstrap, commit the regenerated files, cut a release.
+
+## Development
+
+```bash
+pnpm install
+pnpm -r build
+pnpm -r test
+pnpm -r typecheck
+```
+
+Requires **Node ≥ 20** and **pnpm ≥ 9**.
+
+To run the live examples against a real Lazada app, copy `.env.example` to `.env`, fill in your credentials, then:
+
+```bash
+npx tsx examples/seller-smoke.ts       # GET /seller/get
+npx tsx examples/post-smoke.ts         # POST /images/migrate (body-signing)
+npx tsx examples/get-pending-orders.ts # Paginated order fetch
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full regeneration loop, commit conventions, and release process.
+
+## License
+
+MIT. See [LICENSE](packages/sdk-ts/LICENSE).
 
 ---
 

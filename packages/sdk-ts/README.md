@@ -125,7 +125,9 @@ try {
 
 ## Status
 
-**v0.1.0 (alpha).** The SDK has full unit-test coverage for signing, token refresh, URL routing, form encoding, and error classification — but has **not yet been validated against a live Lazada environment**. The first production user should expect to file 1–2 issues around edge cases (unicode params, unusual body shapes). Breaking changes are possible until v1.0.
+**v0.1.0-alpha.** Plumbing validated against the live Lazada SG production API on 2026-04-21: `GET /seller/get` (manager dispatch + query signing) and `POST /images/migrate` (form-body signing pool) both returned `code: 0`. Unit tests cover signing, token refresh with concurrency coalescing, URL routing, form encoding, and error classification.
+
+**Not yet live-validated:** the other 5 regions (VN, PH, MY, TH, ID), real-world error codes from the wire, unicode payloads, token-refresh round-trips against the auth host, multi-page pagination, and 31 of 33 managers. The first production user of any specific endpoint should expect to file 1–2 edge-case issues. Breaking changes are possible until v1.0.
 
 ## License
 
