@@ -3,14 +3,13 @@
  * a summary. Demonstrates:
  *   - SDK construction with env-var credentials
  *   - Typed manager call with query params
- *   - Error handling via the discriminated `{ data, error }` return
- *   - Simple paginated-style iteration using `limit` / `offset`
+ *   - The `paginate()` async-iterator helper for multi-page list endpoints
  *
  * Run:
  *   cp .env.example .env   # edit in your credentials
  *   pnpm --filter @lazada-sdk/sdk exec tsx ../../examples/get-pending-orders.ts
  */
-import { LazadaSDK } from "../packages/sdk-ts/src/index.js";
+import { LazadaSDK, paginate } from "../packages/sdk-ts/src/index.js";
 
 function requireEnv(name: string): string {
   const v = process.env[name];
@@ -27,30 +26,18 @@ async function main(): Promise<void> {
   });
 
   const createdAfter = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
-  const pageSize = 50;
-  let offset = 0;
+
+  // `paginate` auto-detects offset-based vs cursor-based responses and keeps
+  // issuing pages until the stream ends or `maxItems` is reached.
   let total = 0;
-
-  while (true) {
-    const { data, error } = await sdk.order.getOrders({
-      created_after: createdAfter,
-      status: "pending",
-      limit: pageSize,
-      offset,
-    } as never);
-
-    if (error) {
-      console.error("Lazada error:", error);
-      process.exit(1);
-    }
-
-    const batch = (data as { data?: { orders?: unknown[]; count?: number } })?.data;
-    const orders = batch?.orders ?? [];
-    total += orders.length;
-    console.log(`Page offset=${offset}: ${orders.length} orders`);
-
-    if (orders.length < pageSize) break;
-    offset += pageSize;
+  for await (const order of paginate(
+    (params) => sdk.order.getOrders(params as never) as never,
+    { created_after: createdAfter, status: "pending" },
+    { itemsKey: "orders", pageSize: 50, maxItems: 1000 },
+  )) {
+    total++;
+    const o = order as { order_id?: string | number; order_number?: string };
+    console.log(`  order ${o.order_id ?? o.order_number ?? "?"}`);
   }
 
   console.log(`\nTotal pending orders in last 7 days: ${total}`);
