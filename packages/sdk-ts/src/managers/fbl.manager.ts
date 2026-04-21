@@ -28,7 +28,7 @@ export class FblManager extends BaseManager {
     return this.client.POST("/fbl/outbound_order/cancel", { body });
   }
 
-  postFblVasCancelvasorder(body: B<"/fbl/vas/cancelVasOrder", "post">) {
+  cancelFblVasVasOrder(body: B<"/fbl/vas/cancelVasOrder", "post">) {
     return this.client.POST("/fbl/vas/cancelVasOrder", { body });
   }
 
@@ -72,7 +72,7 @@ export class FblManager extends BaseManager {
     return this.client.POST("/fbl/product_reinbound/create", { body });
   }
 
-  postFblVasCreatevasorder(body: B<"/fbl/vas/createVasOrder", "post">) {
+  createFblVasVasOrder(body: B<"/fbl/vas/createVasOrder", "post">) {
     return this.client.POST("/fbl/vas/createVasOrder", { body });
   }
 
@@ -88,19 +88,19 @@ export class FblManager extends BaseManager {
     return this.client.GET("/fbl/fulfillment_sku_list/get", { params: { query: params } });
   }
 
-  postFblFulfillmentSkuRelationGetByScItem(body: B<"/fbl/fulfillment_sku_relation/get_by_sc_item", "post">) {
+  getFblFulfillmentSkuRelationByScItem(body: B<"/fbl/fulfillment_sku_relation/get_by_sc_item", "post">) {
     return this.client.POST("/fbl/fulfillment_sku_relation/get_by_sc_item", { body });
   }
 
-  postFblFulfillmentSkuRelationGetBySku(body: B<"/fbl/fulfillment_sku_relation/get_by_sku", "post">) {
+  getFblFulfillmentSkuRelationBySku(body: B<"/fbl/fulfillment_sku_relation/get_by_sku", "post">) {
     return this.client.POST("/fbl/fulfillment_sku_relation/get_by_sku", { body });
   }
 
-  postFblFulfillmentSkuRelationGetByScItems(body: B<"/fbl/fulfillment_sku_relation/get_by_sc_items", "post">) {
+  getFblFulfillmentSkuRelationByScItems(body: B<"/fbl/fulfillment_sku_relation/get_by_sc_items", "post">) {
     return this.client.POST("/fbl/fulfillment_sku_relation/get_by_sc_items", { body });
   }
 
-  postFblFulfillmentSkuRelationGetBySkus(body: B<"/fbl/fulfillment_sku_relation/get_by_skus", "post">) {
+  getFblFulfillmentSkuRelationBySkus(body: B<"/fbl/fulfillment_sku_relation/get_by_skus", "post">) {
     return this.client.POST("/fbl/fulfillment_sku_relation/get_by_skus", { body });
   }
 
@@ -152,7 +152,7 @@ export class FblManager extends BaseManager {
     return this.client.GET("/fbl/stock_rule/get", { params: { query: params } });
   }
 
-  postFblVasGetvasorderbyno(body: B<"/fbl/vas/getVasOrderByNo", "post">) {
+  getFblVasVasOrderByNo(body: B<"/fbl/vas/getVasOrderByNo", "post">) {
     return this.client.POST("/fbl/vas/getVasOrderByNo", { body });
   }
 
@@ -164,7 +164,7 @@ export class FblManager extends BaseManager {
     return this.client.GET("/fbl/stocks/get", { params: { query: params } });
   }
 
-  getFblStocksGetv3(params: Q<"/fbl/stocks/getV3", "get">) {
+  getFblStocksV3(params: Q<"/fbl/stocks/getV3", "get">) {
     return this.client.GET("/fbl/stocks/getV3", { params: { query: params } });
   }
 

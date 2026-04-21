@@ -32,7 +32,7 @@ export class ChoiceCustomizedManager extends BaseManager {
     return this.client.POST("/choice/seller/get", { body });
   }
 
-  postChoiceSkuItemRelationGetBySku(body: B<"/choice/sku_item_relation/get_by_sku", "post">) {
+  getChoiceSkuItemRelationBySku(body: B<"/choice/sku_item_relation/get_by_sku", "post">) {
     return this.client.POST("/choice/sku_item_relation/get_by_sku", { body });
   }
 
@@ -48,11 +48,11 @@ export class ChoiceCustomizedManager extends BaseManager {
     return this.client.POST("/pickup_order/print", { body });
   }
 
-  postJitPurchaseOrderQueryList(body: B<"/jit/purchase_order/query_list", "post">) {
+  queryJitPurchaseOrderList(body: B<"/jit/purchase_order/query_list", "post">) {
     return this.client.POST("/jit/purchase_order/query_list", { body });
   }
 
-  postJitPurchaseOrderQueryListPurchaseItem(body: B<"/jit/purchase_order/query_list_purchase_item", "post">) {
+  queryJitPurchaseOrderListPurchaseItem(body: B<"/jit/purchase_order/query_list_purchase_item", "post">) {
     return this.client.POST("/jit/purchase_order/query_list_purchase_item", { body });
   }
 

@@ -32,7 +32,7 @@ export class ETicketsManager extends BaseManager {
     return this.client.POST("/eticket/ma/query", { body });
   }
 
-  postEticketMaQuerytbma(body: B<"/eticket/ma/queryTbMa", "post">) {
+  queryEticketMaTbMa(body: B<"/eticket/ma/queryTbMa", "post">) {
     return this.client.POST("/eticket/ma/queryTbMa", { body });
   }
 

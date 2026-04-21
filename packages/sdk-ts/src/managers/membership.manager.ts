@@ -48,7 +48,7 @@ export class MembershipManager extends BaseManager {
     return this.client.POST("/partner/update", { body });
   }
 
-  postPartnerUpdatepartneruserid(body: B<"/partner/updatePartnerUserId", "post">) {
+  updatePartnerPartnerUserId(body: B<"/partner/updatePartnerUserId", "post">) {
     return this.client.POST("/partner/updatePartnerUserId", { body });
   }
 

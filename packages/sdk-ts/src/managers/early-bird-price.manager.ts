@@ -16,11 +16,11 @@ export class EarlyBirdPriceManager extends BaseManager {
     return this.client.POST("/activity/early/bird/create", { body });
   }
 
-  postActivityEarlyBirdAddskus(body: B<"/activity/early/bird/addSkus", "post">) {
+  addActivityEarlyBirdSkus(body: B<"/activity/early/bird/addSkus", "post">) {
     return this.client.POST("/activity/early/bird/addSkus", { body });
   }
 
-  postActivityEarlyBirdDeactivateskus(body: B<"/activity/early/bird/deactivateSkus", "post">) {
+  deactivateActivityEarlyBirdSkus(body: B<"/activity/early/bird/deactivateSkus", "post">) {
     return this.client.POST("/activity/early/bird/deactivateSkus", { body });
   }
 

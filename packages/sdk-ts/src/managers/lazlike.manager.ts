@@ -12,11 +12,11 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class LazlikeManager extends BaseManager {
-  postContentMcnContentQuerytaginfosbyname(body: B<"/content/mcn/content/queryTagInfosByName", "post">) {
+  queryContentMcnContentTagInfosByName(body: B<"/content/mcn/content/queryTagInfosByName", "post">) {
     return this.client.POST("/content/mcn/content/queryTagInfosByName", { body });
   }
 
-  postContentMcnContentCancelscheduled(body: B<"/content/mcn/content/cancelScheduled", "post">) {
+  cancelContentMcnContentScheduled(body: B<"/content/mcn/content/cancelScheduled", "post">) {
     return this.client.POST("/content/mcn/content/cancelScheduled", { body });
   }
 
@@ -40,7 +40,7 @@ export class LazlikeManager extends BaseManager {
     return this.client.POST("/content/mcn/property/list", {});
   }
 
-  postContentMcnContentReplyschedulepublish(body: B<"/content/mcn/content/replySchedulePublish", "post">) {
+  replyContentMcnContentSchedulePublish(body: B<"/content/mcn/content/replySchedulePublish", "post">) {
     return this.client.POST("/content/mcn/content/replySchedulePublish", { body });
   }
 
@@ -60,7 +60,7 @@ export class LazlikeManager extends BaseManager {
     return this.client.POST("/content/mcn/similar/product/search", { body });
   }
 
-  postContentMcnContentQueryreviewrecords(body: B<"/content/mcn/content/queryReviewRecords", "post">) {
+  queryContentMcnContentReviewRecords(body: B<"/content/mcn/content/queryReviewRecords", "post">) {
     return this.client.POST("/content/mcn/content/queryReviewRecords", { body });
   }
 

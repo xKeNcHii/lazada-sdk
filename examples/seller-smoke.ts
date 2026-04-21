@@ -23,7 +23,7 @@ async function main(): Promise<void> {
     accessToken: requireEnv("LAZADA_ACCESS_TOKEN"),
   });
 
-  const { data, error } = await sdk.seller.get();
+  const { data, error } = await sdk.seller.getSeller();
   if (error) {
     // eslint-disable-next-line no-console
     console.error("Error:", error);

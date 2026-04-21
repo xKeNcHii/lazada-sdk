@@ -40,11 +40,11 @@ export class LogisticsManager extends BaseManager {
     return this.client.POST("/logistics/tps/sellers/pickup_timeslot", { body });
   }
 
-  postLogisticsLdpCreateconsolidationservice(body: B<"/logistics/ldp/createConsolidationService", "post">) {
+  createLogisticsLdpConsolidationService(body: B<"/logistics/ldp/createConsolidationService", "post">) {
     return this.client.POST("/logistics/ldp/createConsolidationService", { body });
   }
 
-  postLogisticsLdpUpdatelastmile(body: B<"/logistics/ldp/updateLastmile", "post">) {
+  updateLogisticsLdpLastmile(body: B<"/logistics/ldp/updateLastmile", "post">) {
     return this.client.POST("/logistics/ldp/updateLastmile", { body });
   }
 

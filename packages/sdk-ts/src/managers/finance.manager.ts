@@ -16,11 +16,11 @@ export class FinanceManager extends BaseManager {
     return this.client.GET("/finance/payout/status/get", { params: { query: params } });
   }
 
-  queryFinanceTransactionAccounttransactions(body: B<"/finance/transaction/accountTransactions/query", "post">) {
+  queryFinanceTransactionAccountTransactions(body: B<"/finance/transaction/accountTransactions/query", "post">) {
     return this.client.POST("/finance/transaction/accountTransactions/query", { body });
   }
 
-  postLbsSlbQuerylogisticsfeedetail(body: B<"/lbs/slb/queryLogisticsFeeDetail", "post">) {
+  queryLbsSlbLogisticsFeeDetail(body: B<"/lbs/slb/queryLogisticsFeeDetail", "post">) {
     return this.client.POST("/lbs/slb/queryLogisticsFeeDetail", { body });
   }
 

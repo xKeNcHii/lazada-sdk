@@ -16,7 +16,7 @@ export class SystemManager extends BaseManager {
     return this.client.POST("/auth/token/create", { body });
   }
 
-  postAuthTokenCreatewithopenid(body: B<"/auth/token/createWithOpenId", "post">) {
+  createAuthTokenWithOpenId(body: B<"/auth/token/createWithOpenId", "post">) {
     return this.client.POST("/auth/token/createWithOpenId", { body });
   }
 
@@ -24,7 +24,7 @@ export class SystemManager extends BaseManager {
     return this.client.POST("/auth/token/refresh", { body });
   }
 
-  postFbiDownloadStartexportbydataset(body: B<"/fbi/download/startExportByDataset", "post">) {
+  postFbiDownloadStartExportByDataset(body: B<"/fbi/download/startExportByDataset", "post">) {
     return this.client.POST("/fbi/download/startExportByDataset", { body });
   }
 

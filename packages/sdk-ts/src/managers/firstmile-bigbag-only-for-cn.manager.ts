@@ -16,7 +16,7 @@ export class FirstmileBigbagOnlyForCnManager extends BaseManager {
     return this.client.POST("/logistics/cngfc/fulfill/getchannelcode", { body });
   }
 
-  postLogisticsCnpmsBigbagLableGetpdf(body: B<"/logistics/cnpms/bigbag/lable/getPdf", "post">) {
+  getLogisticsCnpmsBigbagLablePdf(body: B<"/logistics/cnpms/bigbag/lable/getPdf", "post">) {
     return this.client.POST("/logistics/cnpms/bigbag/lable/getPdf", { body });
   }
 

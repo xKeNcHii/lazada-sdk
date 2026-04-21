@@ -16,7 +16,7 @@ npm install @lazada-sdk/sdk
 pnpm add @lazada-sdk/sdk
 ```
 
-Requires Node.js ≥ 20.
+Runs on **Node ≥ 20, Cloudflare Workers, Vercel Edge, Deno, and modern browsers**. Signing uses WebCrypto — no `node:crypto` dependency.
 
 ## Quick start
 
@@ -30,7 +30,7 @@ const sdk = new LazadaSDK({
   accessToken: process.env.LAZADA_ACCESS_TOKEN!,
 });
 
-const { data, error } = await sdk.seller.get();
+const { data, error } = await sdk.seller.getSeller();
 if (error) throw error;
 console.log(data);
 ```
@@ -48,17 +48,14 @@ console.log(data);
 You bring your own access token. To exchange an OAuth `code` for a token:
 
 ```ts
-const { data } = await sdk.system.generateAccessToken({ code: oauthCode });
+const { data } = await sdk.system.createAuthToken({ code: oauthCode });
 // data.access_token, data.refresh_token, data.expires_in, ...
 ```
 
-Refresh:
-
-```ts
-const { data } = await sdk.system.refreshAccessToken({
-  refresh_token: stored.refresh_token,
-});
-```
+Refresh is automatic: pass a `refreshToken` at construction time and the SDK
+refreshes before every request where the access token is within
+`refreshBufferSec` of expiry (default 60s). Concurrent requests during a
+refresh coalesce into a single network call.
 
 ## Managers
 
@@ -75,7 +72,20 @@ sdk.choiceCustomized, sdk.firstmileBigbagOnlyForCn, sdk.logisticsStation,
 sdk.serviceMarket, sdk.lazadaDg, sdk.lazadaWalletCorporateTopUp, sdk.system
 ```
 
-Method names for `order`, `seller`, and `system` are hand-polished. The other 30 groups use auto-generated names following `<verb><PathSegments>` (e.g. `getOrdersItems`, `postImageUpload`). Hand-polished names land in a minor version bump as they're added.
+All method names are generated from the OpenAPI spec using a `<verb><PathSegments>` heuristic — e.g. `/orders/get` becomes `getOrders`, `/image/upload` becomes `uploadImage`. Spec refreshes regenerate cleanly; no hand-maintained wrapper code drifts out of sync.
+
+### GET/POST duality
+
+Many Lazada endpoints are registered twice — once as `GET /foo/get` (query
+params) and once as `POST /foo/get` (form-encoded body). The two variants have
+identical semantics; POST exists to handle payloads that exceed URL length
+limits. **The SDK emits one method per path, preferring POST when both
+exist.** If a code sample you're following specifically calls the GET variant
+and you need to match that transport, reach for the raw client:
+
+```ts
+await sdk.client.GET("/choice/products/get", { params: { query: { ... } } });
+```
 
 ## Error handling
 
@@ -83,7 +93,7 @@ Method names for `order`, `seller`, and `system` are hand-polished. The other 30
 import { LazadaApiError, LazadaAuthError, LazadaRateLimitError } from "@lazada-sdk/sdk";
 
 try {
-  await sdk.order.getList({ created_after: "2024-01-01" });
+  await sdk.order.getOrders({ created_after: "2024-01-01" });
 } catch (err) {
   if (err instanceof LazadaAuthError) {
     // Refresh your access token and retry
@@ -97,7 +107,7 @@ try {
 
 ## Status
 
-**v0.0.x** — API surface is functional but lightly road-tested. Signing and URL routing have unit tests but have not been run against every Lazada endpoint. POST endpoints with request bodies should be smoke-tested before relying on them in production.
+**v0.1.0 (alpha).** The SDK has full unit-test coverage for signing, token refresh, URL routing, form encoding, and error classification — but has **not yet been validated against a live Lazada environment**. The first production user should expect to file 1–2 issues around edge cases (unicode params, unusual body shapes). Breaking changes are possible until v1.0.
 
 ## License
 
