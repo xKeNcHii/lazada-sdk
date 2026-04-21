@@ -1,26 +1,45 @@
 {
   "name": "@lazada-sdk/sdk",
   "version": "0.0.1",
-  "description": "Unofficial TypeScript SDK for the Lazada Open Platform API.",
+  "description": "Unofficial TypeScript SDK for the Lazada Open Platform API. Not affiliated with Lazada.",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "sideEffects": false,
+  "files": ["dist", "README.md", "LICENSE"],
+  "keywords": [
+    "lazada",
+    "api",
+    "sdk",
+    "typescript",
+    "e-commerce",
+    "southeast-asia",
+    "marketplace",
+    "openapi"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xKeNcHii/lazada-sdk.git",
+    "directory": "packages/sdk-ts"
+  },
+  "homepage": "https://github.com/xKeNcHii/lazada-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/xKeNcHii/lazada-sdk/issues"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "gen:types": "openapi-typescript ../../spec/openapi/lazada.openapi.yaml -o src/schemas/generated.ts"
+    "gen:types": "openapi-typescript ../../spec/openapi/lazada.openapi.yaml -o src/schemas/generated.ts",
+    "prepublishOnly": "pnpm gen:types && pnpm build"
   },
   "dependencies": {
     "openapi-fetch": "^0.13.5"
@@ -35,5 +54,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
