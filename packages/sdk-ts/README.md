@@ -1,5 +1,9 @@
 # @lazada-sdk/sdk
 
+[![CI](https://github.com/xKeNcHii/lazada-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/xKeNcHii/lazada-sdk/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js >=20](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org)
+
 Unofficial TypeScript SDK for the Lazada Open Platform API.
 
 > **Not affiliated with Lazada.** Derived from public documentation. Use at your own risk. See [Lazada's terms](https://open.lazada.com/).
