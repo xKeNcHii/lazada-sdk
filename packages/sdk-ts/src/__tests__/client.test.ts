@@ -122,7 +122,7 @@ describe("client middleware", () => {
     let form: URLSearchParams | null = null;
     let signedPool: Record<string, string> | null = null;
     server.use(
-      http.post("https://api.lazada.sg/rest/orders/get", async ({ request }) => {
+      http.post("https://api.lazada.sg/rest/orders/ovo/get", async ({ request }) => {
         form = new URLSearchParams(await request.text());
         const u = new URL(request.url);
         signedPool = Object.fromEntries(u.searchParams.entries());
@@ -130,7 +130,7 @@ describe("client middleware", () => {
       }),
     );
     const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
-    await sdk.client.POST("/orders/get", {
+    await sdk.client.POST("/orders/ovo/get", {
       body: { created_after: "2024-01-01", limit: 50, status: "pending" } as never,
     });
     expect(form!.get("created_after")).toBe("2024-01-01");
@@ -160,13 +160,13 @@ describe("client middleware", () => {
   it("drops undefined/null fields from the form body", async () => {
     let form: URLSearchParams | null = null;
     server.use(
-      http.post("https://api.lazada.sg/rest/orders/get", async ({ request }) => {
+      http.post("https://api.lazada.sg/rest/orders/ovo/get", async ({ request }) => {
         form = new URLSearchParams(await request.text());
         return HttpResponse.json({ code: "0" });
       }),
     );
     const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
-    await sdk.client.POST("/orders/get", {
+    await sdk.client.POST("/orders/ovo/get", {
       body: { a: "1", b: undefined, c: null, d: "2" } as never,
     });
     expect(form!.get("a")).toBe("1");
@@ -180,7 +180,7 @@ describe("client middleware", () => {
     let secondSign = "";
     let calls = 0;
     server.use(
-      http.post("https://api.lazada.sg/rest/orders/get", ({ request }) => {
+      http.post("https://api.lazada.sg/rest/orders/ovo/get", ({ request }) => {
         const sign = new URL(request.url).searchParams.get("sign") ?? "";
         if (calls === 0) firstSign = sign;
         else secondSign = sign;
@@ -192,8 +192,8 @@ describe("client middleware", () => {
     const origDateNow = Date.now;
     Date.now = () => 1_700_000_000_000;
     try {
-      await sdk.client.POST("/orders/get", { body: { x: "1" } as never });
-      await sdk.client.POST("/orders/get", { body: { x: "2" } as never });
+      await sdk.client.POST("/orders/ovo/get", { body: { x: "1" } as never });
+      await sdk.client.POST("/orders/ovo/get", { body: { x: "2" } as never });
     } finally {
       Date.now = origDateNow;
     }
