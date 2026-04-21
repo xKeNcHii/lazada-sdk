@@ -1,0 +1,48 @@
+# lazada-sdk
+
+Unofficial TypeScript SDK for the Lazada Open Platform API. Not affiliated with Lazada. Derived from public documentation via a markdown → OpenAPI → typed client pipeline.
+
+## Setup
+
+- [SDK README](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/README.md): install, quickstart, auth, regions, managers
+- [Repository README](https://github.com/xKeNcHii/lazada-sdk/blob/main/README.md): monorepo layout, how the parser + generator work
+- [LICENSE (MIT)](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/LICENSE)
+
+## Auth & signing (the tricky parts)
+
+- [Signature algorithm](https://github.com/xKeNcHii/lazada-sdk/blob/main/docs/guides/developer-s-guide.md#signature-algorithm): HMAC-SHA256 over `apiPath + sorted k1v1… + body?`, uppercase hex
+- [Signing implementation](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/signature.ts): 40 lines, `node:crypto` only
+- [Signing middleware](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/client.ts): injects auth params, routes auth host vs regional, form-encodes POST bodies
+- [OAuth flow](https://github.com/xKeNcHii/lazada-sdk/blob/main/docs/guides/quick-start-guide.md): token lifecycles — test apps get 7-day / 14-day, live apps 30-day / 180-day
+
+## Managers (API groups)
+
+One manager per Lazada API group, exposed as a field on `LazadaSDK`. Method names for `order`, `seller`, `system` are hand-polished; the rest use auto-generated `<verb><PathSegments>` names.
+
+- [Order](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/order.manager.ts) — `sdk.order.getList`, `sdk.order.getItems`
+- [Product](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/product.manager.ts) — 28 endpoints; catalog management
+- [Logistics](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/logistics.manager.ts) — shipment, tracking, labels
+- [Lazada Logistics](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/lazada-logistics.manager.ts) — 29 endpoints, newer logistics surface
+- [Seller](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/seller.manager.ts) — account + metrics
+- [Finance](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/finance.manager.ts) — payouts, statements
+- [Fulfillment](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/fulfillment.manager.ts) — pack, ship, RTS flow
+- [Return & Refund](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/return-and-refund.manager.ts)
+- [System (auth)](https://github.com/xKeNcHii/lazada-sdk/blob/main/packages/sdk-ts/src/managers/system.manager.ts) — `generateAccessToken`, `refreshAccessToken`
+- [Full manager list (33 total)](https://github.com/xKeNcHii/lazada-sdk/tree/main/packages/sdk-ts/src/managers)
+
+## Machine-readable spec
+
+- [OpenAPI 3.1 YAML](https://github.com/xKeNcHii/lazada-sdk/blob/main/spec/openapi/lazada.openapi.yaml) — single source of truth, 367 operations, regenerated from `docs/api/*.md`
+- [Parser](https://github.com/xKeNcHii/lazada-sdk/blob/main/spec/src/parse-docs.ts) — markdown → OpenAPI converter, ~420 LOC, regex-based
+- [Bootstrap script](https://github.com/xKeNcHii/lazada-sdk/blob/main/spec/src/bootstrap-managers.ts) — regenerates manager files from the spec
+
+## Examples
+
+- [GET smoke (sandbox)](https://github.com/xKeNcHii/lazada-sdk/blob/main/examples/seller-smoke.ts): verified working against `api.lazada.sg` test account
+- [POST smoke (sandbox)](https://github.com/xKeNcHii/lazada-sdk/blob/main/examples/post-smoke.ts): form-encoded body, batch_id response
+
+## Optional
+
+- [Implementation plan](https://github.com/xKeNcHii/lazada-sdk/blob/main/README.md): full design doc including the monthly refresh pipeline
+- [Dependabot config](https://github.com/xKeNcHii/lazada-sdk/blob/main/.github/dependabot.yml): weekly grouped dev/prod bumps, GitHub Actions tracked separately
+- [CI workflow](https://github.com/xKeNcHii/lazada-sdk/blob/main/.github/workflows/ci.yml): parse → lint → gen types → typecheck → test → build

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "node",
+  "bootstrap-sha": "4f482b2",
+  "packages": {
+    "packages/sdk-ts": {
+      "package-name": "@lazada-sdk/sdk",
+      "changelog-path": "CHANGELOG.md"
+    },
+    "spec": {
+      "package-name": "@lazada-sdk/spec",
+      "changelog-path": "CHANGELOG.md"
+    }
+  },
+  "plugins": ["node-workspace"]
+}

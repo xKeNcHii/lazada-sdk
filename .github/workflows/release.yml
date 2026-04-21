@@ -1,0 +1,45 @@
+name: release-please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write # required for npm provenance
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    needs: release-please
+    if: needs.release-please.outputs.releases_created == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @lazada-sdk/spec exec tsx src/parse-docs.ts
+      - run: pnpm --filter @lazada-sdk/sdk gen:types
+      - run: pnpm --filter @lazada-sdk/sdk build
+      - name: Publish @lazada-sdk/sdk
+        if: contains(needs.release-please.outputs.paths_released, 'packages/sdk-ts')
+        run: pnpm --filter @lazada-sdk/sdk publish --no-git-checks --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

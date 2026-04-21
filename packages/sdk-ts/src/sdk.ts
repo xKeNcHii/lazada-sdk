@@ -1,0 +1,126 @@
+import { createLazadaClient, type LazadaClient } from "./client.js";
+import type { LazadaConfig } from "./config.js";
+import { TokenManager } from "./token-manager.js";
+import { ChoiceCustomizedManager } from "./managers/choice-customized.manager.js";
+import { ContentManager } from "./managers/content.manager.js";
+import { CrossBoarderProductManager } from "./managers/cross-boarder-product.manager.js";
+import { ETicketsManager } from "./managers/e-tickets.manager.js";
+import { EarlyBirdPriceManager } from "./managers/early-bird-price.manager.js";
+import { FblManager } from "./managers/fbl.manager.js";
+import { FinanceManager } from "./managers/finance.manager.js";
+import { FirstmileBigbagOnlyForCnManager } from "./managers/firstmile-bigbag-only-for-cn.manager.js";
+import { FlexicomboManager } from "./managers/flexicombo.manager.js";
+import { FreeShippingManager } from "./managers/free-shipping.manager.js";
+import { FulfillmentManager } from "./managers/fulfillment.manager.js";
+import { InstantMessagingManager } from "./managers/instant-messaging.manager.js";
+import { LazadaDgManager } from "./managers/lazada-dg.manager.js";
+import { LazadaLogisticsManager } from "./managers/lazada-logistics.manager.js";
+import { LazadaWalletCorporateTopUpManager } from "./managers/lazada-wallet-corporate-top-up.manager.js";
+import { LazlikeManager } from "./managers/lazlike.manager.js";
+import { LazliveManager } from "./managers/lazlive.manager.js";
+import { LazpayManager } from "./managers/lazpay.manager.js";
+import { LogisticsManager } from "./managers/logistics.manager.js";
+import { LogisticsStationManager } from "./managers/logistics-station.manager.js";
+import { MediaCenterManager } from "./managers/media-center.manager.js";
+import { MembershipManager } from "./managers/membership.manager.js";
+import { OrderManager } from "./managers/order.manager.js";
+import { ProductManager } from "./managers/product.manager.js";
+import { ProductReviewManager } from "./managers/product-review.manager.js";
+import { RedmartManager } from "./managers/redmart.manager.js";
+import { ReturnAndRefundManager } from "./managers/return-and-refund.manager.js";
+import { SellerManager } from "./managers/seller.manager.js";
+import { SellerVoucherManager } from "./managers/seller-voucher.manager.js";
+import { ServiceMarketManager } from "./managers/service-market.manager.js";
+import { SponsoredSolutionsManager } from "./managers/sponsored-solutions.manager.js";
+import { StoreDecorationManager } from "./managers/store-decoration.manager.js";
+import { SystemManager } from "./managers/system.manager.js";
+
+export class LazadaSDK {
+  readonly client: LazadaClient;
+  readonly tokenManager: TokenManager;
+  readonly choiceCustomized: ChoiceCustomizedManager;
+  readonly content: ContentManager;
+  readonly crossBoarderProduct: CrossBoarderProductManager;
+  readonly eTickets: ETicketsManager;
+  readonly earlyBirdPrice: EarlyBirdPriceManager;
+  readonly fbl: FblManager;
+  readonly finance: FinanceManager;
+  readonly firstmileBigbagOnlyForCn: FirstmileBigbagOnlyForCnManager;
+  readonly flexicombo: FlexicomboManager;
+  readonly freeShipping: FreeShippingManager;
+  readonly fulfillment: FulfillmentManager;
+  readonly instantMessaging: InstantMessagingManager;
+  readonly lazadaDg: LazadaDgManager;
+  readonly lazadaLogistics: LazadaLogisticsManager;
+  readonly lazadaWalletCorporateTopUp: LazadaWalletCorporateTopUpManager;
+  readonly lazlike: LazlikeManager;
+  readonly lazlive: LazliveManager;
+  readonly lazpay: LazpayManager;
+  readonly logistics: LogisticsManager;
+  readonly logisticsStation: LogisticsStationManager;
+  readonly mediaCenter: MediaCenterManager;
+  readonly membership: MembershipManager;
+  readonly order: OrderManager;
+  readonly product: ProductManager;
+  readonly productReview: ProductReviewManager;
+  readonly redmart: RedmartManager;
+  readonly returnAndRefund: ReturnAndRefundManager;
+  readonly seller: SellerManager;
+  readonly sellerVoucher: SellerVoucherManager;
+  readonly serviceMarket: ServiceMarketManager;
+  readonly sponsoredSolutions: SponsoredSolutionsManager;
+  readonly storeDecoration: StoreDecorationManager;
+  readonly system: SystemManager;
+
+  constructor(public readonly config: LazadaConfig) {
+    this.tokenManager = new TokenManager({
+      appKey: config.appKey,
+      appSecret: config.appSecret,
+      ...(config.accessToken !== undefined ? { accessToken: config.accessToken } : {}),
+      ...(config.refreshToken !== undefined ? { refreshToken: config.refreshToken } : {}),
+      ...(config.tokenExpiresAt !== undefined ? { tokenExpiresAt: config.tokenExpiresAt } : {}),
+      ...(config.storage !== undefined ? { storage: config.storage } : {}),
+      ...(config.storageKey !== undefined ? { storageKey: config.storageKey } : {}),
+      ...(config.refreshBufferSec !== undefined
+        ? { refreshBufferSec: config.refreshBufferSec }
+        : {}),
+      ...(config.authBaseUrlOverride !== undefined
+        ? { authBaseUrl: config.authBaseUrlOverride }
+        : {}),
+    });
+    this.client = createLazadaClient(config, this.tokenManager);
+    this.choiceCustomized = new ChoiceCustomizedManager(this.client);
+    this.content = new ContentManager(this.client);
+    this.crossBoarderProduct = new CrossBoarderProductManager(this.client);
+    this.eTickets = new ETicketsManager(this.client);
+    this.earlyBirdPrice = new EarlyBirdPriceManager(this.client);
+    this.fbl = new FblManager(this.client);
+    this.finance = new FinanceManager(this.client);
+    this.firstmileBigbagOnlyForCn = new FirstmileBigbagOnlyForCnManager(this.client);
+    this.flexicombo = new FlexicomboManager(this.client);
+    this.freeShipping = new FreeShippingManager(this.client);
+    this.fulfillment = new FulfillmentManager(this.client);
+    this.instantMessaging = new InstantMessagingManager(this.client);
+    this.lazadaDg = new LazadaDgManager(this.client);
+    this.lazadaLogistics = new LazadaLogisticsManager(this.client);
+    this.lazadaWalletCorporateTopUp = new LazadaWalletCorporateTopUpManager(this.client);
+    this.lazlike = new LazlikeManager(this.client);
+    this.lazlive = new LazliveManager(this.client);
+    this.lazpay = new LazpayManager(this.client);
+    this.logistics = new LogisticsManager(this.client);
+    this.logisticsStation = new LogisticsStationManager(this.client);
+    this.mediaCenter = new MediaCenterManager(this.client);
+    this.membership = new MembershipManager(this.client);
+    this.order = new OrderManager(this.client);
+    this.product = new ProductManager(this.client);
+    this.productReview = new ProductReviewManager(this.client);
+    this.redmart = new RedmartManager(this.client);
+    this.returnAndRefund = new ReturnAndRefundManager(this.client);
+    this.seller = new SellerManager(this.client);
+    this.sellerVoucher = new SellerVoucherManager(this.client);
+    this.serviceMarket = new ServiceMarketManager(this.client);
+    this.sponsoredSolutions = new SponsoredSolutionsManager(this.client);
+    this.storeDecoration = new StoreDecorationManager(this.client);
+    this.system = new SystemManager(this.client);
+  }
+}
