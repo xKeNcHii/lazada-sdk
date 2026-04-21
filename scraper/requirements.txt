@@ -1,0 +1,5 @@
+playwright==1.48.0
+beautifulsoup4==4.13.4
+markdownify==0.13.1
+tenacity==9.0.0
+tqdm==4.67.0
