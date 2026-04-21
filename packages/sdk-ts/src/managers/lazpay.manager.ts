@@ -24,15 +24,15 @@ export class LazpayManager extends BaseManager {
     return this.client.POST("/digital/service/createorder", { body });
   }
 
-  postDigitalServiceGetpaymentstatus(body: B<"/digital/service/getPaymentStatus", "post">) {
+  getDigitalServicePaymentStatus(body: B<"/digital/service/getPaymentStatus", "post">) {
     return this.client.POST("/digital/service/getPaymentStatus", { body });
   }
 
-  postDigitalServiceUpdatefulfillemtstatus(body: B<"/digital/service/updateFulfillemtStatus", "post">) {
+  updateDigitalServiceFulfillemtStatus(body: B<"/digital/service/updateFulfillemtStatus", "post">) {
     return this.client.POST("/digital/service/updateFulfillemtStatus", { body });
   }
 
-  postDigitalOrderAlterstatus(body: B<"/digital/order/alterStatus", "post">) {
+  postDigitalOrderAlterStatus(body: B<"/digital/order/alterStatus", "post">) {
     return this.client.POST("/digital/order/alterStatus", { body });
   }
 
@@ -40,15 +40,15 @@ export class LazpayManager extends BaseManager {
     return this.client.POST("/digital/order/create", { body });
   }
 
-  postDigitalOrderGetstatus(body: B<"/digital/order/getStatus", "post">) {
+  getDigitalOrderStatus(body: B<"/digital/order/getStatus", "post">) {
     return this.client.POST("/digital/order/getStatus", { body });
   }
 
-  postInsuranceSubscriptionGetsubscription(body: B<"/insurance/subscription/getSubscription", "post">) {
+  getInsuranceSubscriptionSubscription(body: B<"/insurance/subscription/getSubscription", "post">) {
     return this.client.POST("/insurance/subscription/getSubscription", { body });
   }
 
-  postInsuranceOrderAlterstatus(body: B<"/insurance/order/alterStatus", "post">) {
+  postInsuranceOrderAlterStatus(body: B<"/insurance/order/alterStatus", "post">) {
     return this.client.POST("/insurance/order/alterStatus", { body });
   }
 
@@ -56,11 +56,11 @@ export class LazpayManager extends BaseManager {
     return this.client.POST("/insurance/order/create", { body });
   }
 
-  postInsurancePromotionGetpromotions(body: B<"/insurance/promotion/getPromotions", "post">) {
+  getInsurancePromotionPromotions(body: B<"/insurance/promotion/getPromotions", "post">) {
     return this.client.POST("/insurance/promotion/getPromotions", { body });
   }
 
-  postInsuranceOrderGetstatus(body: B<"/insurance/order/getStatus", "post">) {
+  getInsuranceOrderStatus(body: B<"/insurance/order/getStatus", "post">) {
     return this.client.POST("/insurance/order/getStatus", { body });
   }
 
@@ -88,11 +88,11 @@ export class LazpayManager extends BaseManager {
     return this.client.POST("/wallet/open/service/reconciliation", { body });
   }
 
-  postInsurancePromotionCollectbenefit(body: B<"/insurance/promotion/collectBenefit", "post">) {
+  postInsurancePromotionCollectBenefit(body: B<"/insurance/promotion/collectBenefit", "post">) {
     return this.client.POST("/insurance/promotion/collectBenefit", { body });
   }
 
-  postInsuranceSynccdp(body: B<"/insurance/syncCDP", "post">) {
+  syncInsuranceCdp(body: B<"/insurance/syncCDP", "post">) {
     return this.client.POST("/insurance/syncCDP", { body });
   }
 
@@ -100,7 +100,7 @@ export class LazpayManager extends BaseManager {
     return this.client.POST("/insurance/addon/orders/query", { body });
   }
 
-  postInsurancePromotionQuerybenefit(body: B<"/insurance/promotion/queryBenefit", "post">) {
+  queryInsurancePromotionBenefit(body: B<"/insurance/promotion/queryBenefit", "post">) {
     return this.client.POST("/insurance/promotion/queryBenefit", { body });
   }
 

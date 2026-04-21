@@ -12,11 +12,11 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class SponsoredSolutionsManager extends BaseManager {
-  postSponsorSolutionsAdgroupAddadgroupbatch(body: B<"/sponsor/solutions/adgroup/addAdgroupBatch", "post">) {
+  addSponsorSolutionsAdgroupAdgroupBatch(body: B<"/sponsor/solutions/adgroup/addAdgroupBatch", "post">) {
     return this.client.POST("/sponsor/solutions/adgroup/addAdgroupBatch", { body });
   }
 
-  postSponsorSolutionsAddsolution(body: B<"/sponsor/solutions/addSolution", "post">) {
+  addSponsorSolutionsSolution(body: B<"/sponsor/solutions/addSolution", "post">) {
     return this.client.POST("/sponsor/solutions/addSolution", { body });
   }
 
@@ -24,91 +24,91 @@ export class SponsoredSolutionsManager extends BaseManager {
     return this.client.POST("/gproject/ads/aidc/click", { body });
   }
 
-  postSponsorSolutionsAdgroupDeleteadgroupbatch(body: B<"/sponsor/solutions/adgroup/deleteAdgroupBatch", "post">) {
+  deleteSponsorSolutionsAdgroupAdgroupBatch(body: B<"/sponsor/solutions/adgroup/deleteAdgroupBatch", "post">) {
     return this.client.POST("/sponsor/solutions/adgroup/deleteAdgroupBatch", { body });
   }
 
-  postSponsorSolutionsCampaignDeletecampaign(body: B<"/sponsor/solutions/campaign/deleteCampaign", "post">) {
+  deleteSponsorSolutionsCampaignCampaign(body: B<"/sponsor/solutions/campaign/deleteCampaign", "post">) {
     return this.client.POST("/sponsor/solutions/campaign/deleteCampaign", { body });
   }
 
-  getSponsorSolutionsAccountGetaccountsigninfo() {
+  getSponsorSolutionsAccountAccountSignInfo() {
     return this.client.GET("/sponsor/solutions/account/getAccountSignInfo", {});
   }
 
-  postSponsorSolutionsWalletGetautotopupoptiononeconfig() {
+  getSponsorSolutionsWalletAutoTopUpOptionOneConfig() {
     return this.client.POST("/sponsor/solutions/wallet/getAutoTopUpOptionOneConfig", {});
   }
 
-  postSponsorSolutionsCampaignGetcampaign(body: B<"/sponsor/solutions/campaign/getCampaign", "post">) {
+  getSponsorSolutionsCampaignCampaign(body: B<"/sponsor/solutions/campaign/getCampaign", "post">) {
     return this.client.POST("/sponsor/solutions/campaign/getCampaign", { body });
   }
 
-  postSponsorSolutionsCampaignGetcampaigncount(body: B<"/sponsor/solutions/campaign/getCampaignCount", "post">) {
+  getSponsorSolutionsCampaignCampaignCount(body: B<"/sponsor/solutions/campaign/getCampaignCount", "post">) {
     return this.client.POST("/sponsor/solutions/campaign/getCampaignCount", { body });
   }
 
-  postSponsorSolutionsReportGetdiscoveryreportadgroup(body: B<"/sponsor/solutions/report/getDiscoveryReportAdgroup", "post">) {
+  getSponsorSolutionsReportDiscoveryReportAdgroup(body: B<"/sponsor/solutions/report/getDiscoveryReportAdgroup", "post">) {
     return this.client.POST("/sponsor/solutions/report/getDiscoveryReportAdgroup", { body });
   }
 
-  postSponsorSolutionsReportGetdiscoveryreportaudience(body: B<"/sponsor/solutions/report/getDiscoveryReportAudience", "post">) {
+  getSponsorSolutionsReportDiscoveryReportAudience(body: B<"/sponsor/solutions/report/getDiscoveryReportAudience", "post">) {
     return this.client.POST("/sponsor/solutions/report/getDiscoveryReportAudience", { body });
   }
 
-  postSponsorSolutionsReportGetdiscoveryreportcampaign(body: B<"/sponsor/solutions/report/getDiscoveryReportCampaign", "post">) {
+  getSponsorSolutionsReportDiscoveryReportCampaign(body: B<"/sponsor/solutions/report/getDiscoveryReportCampaign", "post">) {
     return this.client.POST("/sponsor/solutions/report/getDiscoveryReportCampaign", { body });
   }
 
-  postSponsorSolutionsReportGetdiscoveryreportkeyword(body: B<"/sponsor/solutions/report/getDiscoveryReportKeyword", "post">) {
+  getSponsorSolutionsReportDiscoveryReportKeyword(body: B<"/sponsor/solutions/report/getDiscoveryReportKeyword", "post">) {
     return this.client.POST("/sponsor/solutions/report/getDiscoveryReportKeyword", { body });
   }
 
-  getSponsorSolutionsAccountGetlatestsigninfo() {
+  getSponsorSolutionsAccountLatestSignInfo() {
     return this.client.GET("/sponsor/solutions/account/getLatestSignInfo", {});
   }
 
-  postSponsorSolutionsReportGetreportcampaignonpreplacement(body: B<"/sponsor/solutions/report/getReportCampaignOnPrePlacement", "post">) {
+  getSponsorSolutionsReportReportCampaignOnPrePlacement(body: B<"/sponsor/solutions/report/getReportCampaignOnPrePlacement", "post">) {
     return this.client.POST("/sponsor/solutions/report/getReportCampaignOnPrePlacement", { body });
   }
 
-  postSponsorSolutionsReportGetreportoverview(body: B<"/sponsor/solutions/report/getReportOverview", "post">) {
+  getSponsorSolutionsReportReportOverview(body: B<"/sponsor/solutions/report/getReportOverview", "post">) {
     return this.client.POST("/sponsor/solutions/report/getReportOverview", { body });
   }
 
-  postSponsorSolutionsReportGetreportoverviewmetric(body: B<"/sponsor/solutions/report/getReportOverviewMetric", "post">) {
+  getSponsorSolutionsReportReportOverviewMetric(body: B<"/sponsor/solutions/report/getReportOverviewMetric", "post">) {
     return this.client.POST("/sponsor/solutions/report/getReportOverviewMetric", { body });
   }
 
-  postSponsorSolutionsCategoryListcategory(body: B<"/sponsor/solutions/category/listCategory", "post">) {
+  listSponsorSolutionsCategoryCategory(body: B<"/sponsor/solutions/category/listCategory", "post">) {
     return this.client.POST("/sponsor/solutions/category/listCategory", { body });
   }
 
-  postSponsorSolutionsKeywordListkeywordbyadgroup(body: B<"/sponsor/solutions/keyword/listKeywordByAdgroup", "post">) {
+  listSponsorSolutionsKeywordKeywordByAdgroup(body: B<"/sponsor/solutions/keyword/listKeywordByAdgroup", "post">) {
     return this.client.POST("/sponsor/solutions/keyword/listKeywordByAdgroup", { body });
   }
 
-  postSponsorSolutionsKeywordListkeywordbyitem(body: B<"/sponsor/solutions/keyword/listKeywordByItem", "post">) {
+  listSponsorSolutionsKeywordKeywordByItem(body: B<"/sponsor/solutions/keyword/listKeywordByItem", "post">) {
     return this.client.POST("/sponsor/solutions/keyword/listKeywordByItem", { body });
   }
 
-  postSponsorSolutionsWalletModifyautotopupoptiononeconfig(body: B<"/sponsor/solutions/wallet/modifyAutoTopUpOptionOneConfig", "post">) {
+  postSponsorSolutionsWalletModifyAutoTopUpOptionOneConfig(body: B<"/sponsor/solutions/wallet/modifyAutoTopUpOptionOneConfig", "post">) {
     return this.client.POST("/sponsor/solutions/wallet/modifyAutoTopUpOptionOneConfig", { body });
   }
 
-  postSponsorSolutionsAdgroupSearchadgrouplist(body: B<"/sponsor/solutions/adgroup/searchAdgroupList", "post">) {
+  searchSponsorSolutionsAdgroupAdgroupList(body: B<"/sponsor/solutions/adgroup/searchAdgroupList", "post">) {
     return this.client.POST("/sponsor/solutions/adgroup/searchAdgroupList", { body });
   }
 
-  postSponsorSolutionsCampaignSearchcampaignlist(body: B<"/sponsor/solutions/campaign/searchCampaignList", "post">) {
+  searchSponsorSolutionsCampaignCampaignList(body: B<"/sponsor/solutions/campaign/searchCampaignList", "post">) {
     return this.client.POST("/sponsor/solutions/campaign/searchCampaignList", { body });
   }
 
-  postSponsorSolutionsKeywordSearchkeyword(body: B<"/sponsor/solutions/keyword/searchKeyword", "post">) {
+  searchSponsorSolutionsKeywordKeyword(body: B<"/sponsor/solutions/keyword/searchKeyword", "post">) {
     return this.client.POST("/sponsor/solutions/keyword/searchKeyword", { body });
   }
 
-  postSponsorSolutionsProductSearchproductwithpage(body: B<"/sponsor/solutions/product/searchProductWithPage", "post">) {
+  searchSponsorSolutionsProductProductWithPage(body: B<"/sponsor/solutions/product/searchProductWithPage", "post">) {
     return this.client.POST("/sponsor/solutions/product/searchProductWithPage", { body });
   }
 
@@ -116,11 +116,11 @@ export class SponsoredSolutionsManager extends BaseManager {
     return this.client.POST("/sponsor/solutions/account/sign", {});
   }
 
-  postSponsorSolutionsAdgroupUpdateadgroupbatch(body: B<"/sponsor/solutions/adgroup/updateAdgroupBatch", "post">) {
+  updateSponsorSolutionsAdgroupAdgroupBatch(body: B<"/sponsor/solutions/adgroup/updateAdgroupBatch", "post">) {
     return this.client.POST("/sponsor/solutions/adgroup/updateAdgroupBatch", { body });
   }
 
-  postSponsorSolutionsCampaignUpdatecampaign(body: B<"/sponsor/solutions/campaign/updateCampaign", "post">) {
+  updateSponsorSolutionsCampaignCampaign(body: B<"/sponsor/solutions/campaign/updateCampaign", "post">) {
     return this.client.POST("/sponsor/solutions/campaign/updateCampaign", { body });
   }
 

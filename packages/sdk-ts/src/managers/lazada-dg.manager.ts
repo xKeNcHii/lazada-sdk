@@ -36,7 +36,7 @@ export class LazadaDgManager extends BaseManager {
     return this.client.POST("/digital/insurance/notificationlapse", { body });
   }
 
-  postDigitalServiceCdkcodereceived(body: B<"/digital/service/cdkCodeReceived", "post">) {
+  postDigitalServiceCdkCodeReceived(body: B<"/digital/service/cdkCodeReceived", "post">) {
     return this.client.POST("/digital/service/cdkCodeReceived", { body });
   }
 

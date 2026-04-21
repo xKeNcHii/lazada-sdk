@@ -44,11 +44,11 @@ export class ProductManager extends BaseManager {
     return this.client.GET("/category/tree/get", { params: { query: params } });
   }
 
-  postCategoryCascadeGetnextcascadeprop(body: B<"/category/cascade/getNextCascadeProp", "post">) {
+  getCategoryCascadeNextCascadeProp(body: B<"/category/cascade/getNextCascadeProp", "post">) {
     return this.client.POST("/category/cascade/getNextCascadeProp", { body });
   }
 
-  postProductSellerItemGetpreqcrules(body: B<"/product/seller/item/getPreQcRules", "post">) {
+  getProductSellerItemPreQcRules(body: B<"/product/seller/item/getPreQcRules", "post">) {
     return this.client.POST("/product/seller/item/getPreQcRules", { body });
   }
 

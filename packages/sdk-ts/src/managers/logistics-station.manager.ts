@@ -16,11 +16,11 @@ export class LogisticsStationManager extends BaseManager {
     return this.client.POST("/logistics/station/cages/validate", { body });
   }
 
-  postLogisticsStationV1ConfirmInbound(body: B<"/logistics/station/v1/confirm-inbound", "post">) {
+  confirmLogisticsStationV1Inbound(body: B<"/logistics/station/v1/confirm-inbound", "post">) {
     return this.client.POST("/logistics/station/v1/confirm-inbound", { body });
   }
 
-  postLogisticsStationV1CpConfirmParcelCollection(body: B<"/logistics/station/v1/cp/confirm-parcel-collection", "post">) {
+  confirmLogisticsStationV1CpParcelCollection(body: B<"/logistics/station/v1/cp/confirm-parcel-collection", "post">) {
     return this.client.POST("/logistics/station/v1/cp/confirm-parcel-collection", { body });
   }
 
@@ -32,7 +32,7 @@ export class LogisticsStationManager extends BaseManager {
     return this.client.POST("/logistics/station/v1/scanned-parcels/delete", { body });
   }
 
-  postLogisticsStationDopConfirmInbound(body: B<"/logistics/station/dop/confirm-inbound", "post">) {
+  confirmLogisticsStationDopInbound(body: B<"/logistics/station/dop/confirm-inbound", "post">) {
     return this.client.POST("/logistics/station/dop/confirm-inbound", { body });
   }
 

@@ -6,10 +6,6 @@
     "packages/sdk-ts": {
       "package-name": "@lazada-sdk/sdk",
       "changelog-path": "CHANGELOG.md"
-    },
-    "spec": {
-      "package-name": "@lazada-sdk/spec",
-      "changelog-path": "CHANGELOG.md"
     }
   },
   "plugins": ["node-workspace"]

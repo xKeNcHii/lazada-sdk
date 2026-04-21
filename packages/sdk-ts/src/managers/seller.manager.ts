@@ -72,7 +72,7 @@ export class SellerManager extends BaseManager {
     return this.client.POST("/hunting/buybox/get", { body });
   }
 
-  postRcSellerwarehouseSavewarehouseinfo(body: B<"/rc/sellerWarehouse/saveWarehouseInfo", "post">) {
+  saveRcSellerWarehouseWarehouseInfo(body: B<"/rc/sellerWarehouse/saveWarehouseInfo", "post">) {
     return this.client.POST("/rc/sellerWarehouse/saveWarehouseInfo", { body });
   }
 

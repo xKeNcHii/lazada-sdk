@@ -20,7 +20,7 @@ export class RedmartManager extends BaseManager {
     return this.client.POST("/rss/pickup-jobs/get", { body });
   }
 
-  getRssPickuplocations(params: Q<"/rss/pickupLocations/get", "get">) {
+  getRssPickupLocations(params: Q<"/rss/pickupLocations/get", "get">) {
     return this.client.GET("/rss/pickupLocations/get", { params: { query: params } });
   }
 
@@ -32,15 +32,15 @@ export class RedmartManager extends BaseManager {
     return this.client.GET("/rss/products/get", { params: { query: params } });
   }
 
-  getRssStocklot(params: Q<"/rss/stockLot/get", "get">) {
+  getRssStockLot(params: Q<"/rss/stockLot/get", "get">) {
     return this.client.GET("/rss/stockLot/get", { params: { query: params } });
   }
 
-  getRssStocklots(params: Q<"/rss/stockLots/get", "get">) {
+  getRssStockLots(params: Q<"/rss/stockLots/get", "get">) {
     return this.client.GET("/rss/stockLots/get", { params: { query: params } });
   }
 
-  updateRssStocklot(body: B<"/rss/stockLot/update", "post">) {
+  updateRssStockLot(body: B<"/rss/stockLot/update", "post">) {
     return this.client.POST("/rss/stockLot/update", { body });
   }
 

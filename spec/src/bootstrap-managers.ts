@@ -43,6 +43,12 @@ function toPascal(seg: string): string {
   if (!seg) return "";
   return seg
     .replace(/[^A-Za-z0-9]+/g, "_")
+    // Insert a boundary before runs of caps or lowercase→cap transitions so
+    // that embedded camelCase path segments like "createWithOpenId" or
+    // "startExportByDataset" split into Create/With/Open/Id rather than
+    // collapsing to Createwithopenid.
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2")
     .split("_")
     .filter(Boolean)
     .map((w) => w[0]!.toUpperCase() + w.slice(1).toLowerCase())
@@ -64,6 +70,20 @@ const LAST_SEG_VERBS = new Set([
   "refund", "print", "save", "enable", "disable", "check", "verify", "refresh",
 ]);
 
+/**
+ * If `seg` is a compound camelCase like "createWithOpenId", return the leading
+ * verb ("create") iff it's in our known verb set, plus the trailing pascal
+ * words ("WithOpenId"). Otherwise null.
+ */
+function splitCompoundVerb(seg: string): { verb: string; noun: string } | null {
+  // toPascal handles the camelCase split; we re-split its output.
+  const words = toPascal(seg).match(/[A-Z][a-z0-9]*/g);
+  if (!words || words.length < 2) return null;
+  const head = words[0]!.toLowerCase();
+  if (!LAST_SEG_VERBS.has(head)) return null;
+  return { verb: head, noun: words.slice(1).join("") };
+}
+
 function methodName(path: string, method: "get" | "post"): string {
   const segs = path.split("/").filter(Boolean);
   const last = segs[segs.length - 1] ?? "";
@@ -71,6 +91,12 @@ function methodName(path: string, method: "get" | "post"): string {
   if (LAST_SEG_VERBS.has(last.toLowerCase())) {
     const noun = rest.map(toPascal).join("");
     return toCamel(toPascal(last) + noun);
+  }
+  // Compound camelCase like "createWithOpenId" → "createParentsWithOpenId"
+  const compound = splitCompoundVerb(last);
+  if (compound) {
+    const parentNoun = rest.map(toPascal).join("");
+    return toCamel(toPascal(compound.verb) + parentNoun + compound.noun);
   }
   const verb = method === "post" ? "post" : "get";
   const noun = segs.map(toPascal).join("");

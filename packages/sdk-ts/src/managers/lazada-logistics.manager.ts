@@ -64,7 +64,7 @@ export class LazadaLogisticsManager extends BaseManager {
     return this.client.POST("/logistics/epis/packages/rts", { body });
   }
 
-  postLogisticsEpisFulfillmentUploadAwb(body: B<"/logistics/epis/fulfillment/upload_awb", "post">) {
+  uploadLogisticsEpisFulfillmentAwb(body: B<"/logistics/epis/fulfillment/upload_awb", "post">) {
     return this.client.POST("/logistics/epis/fulfillment/upload_awb", { body });
   }
 
@@ -88,7 +88,7 @@ export class LazadaLogisticsManager extends BaseManager {
     return this.client.POST("/logistics/epis/estimate_shipping_fee", { body });
   }
 
-  postLogisticsEpisGetShippingFee(body: B<"/logistics/epis/get_shipping_fee", "post">) {
+  getLogisticsEpisShippingFee(body: B<"/logistics/epis/get_shipping_fee", "post">) {
     return this.client.POST("/logistics/epis/get_shipping_fee", { body });
   }
 
