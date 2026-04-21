@@ -9,7 +9,7 @@ import { signRequest } from "../signature.js";
  * before updating the vector.
  */
 describe("signRequest", () => {
-  it("produces a stable HMAC-SHA256 signature for a fixed input", () => {
+  it("produces the locked HMAC-SHA256 signature for a fixed input", () => {
     const sig = signRequest({
       appSecret: "test-secret",
       apiPath: "/order/cancel",
@@ -20,12 +20,22 @@ describe("signRequest", () => {
         access_token: "test-token",
       },
     });
-    // Locked output for regression — confirm no accidental algorithm drift.
-    expect(sig).toMatch(/^[0-9A-F]{64}$/);
     expect(sig).toBe(
-      "E5F91FDDDDE71F93E49EEB4D27A8FC73A3F4CD7F4AE8B4E00FC1E4A51DCB6BFE".length === 64
-        ? sig
-        : sig,
+      "91375F42B474CECEE7172759B6400E74F10FBB6E9E9E145EA2A27DFA17556B18",
+    );
+  });
+
+  it("matches the documented Java-sample shape for the docs' worked example", () => {
+    // Docs: params {foo:1, bar:2, foo_bar:3, foobar:4} + /test/api →
+    // sorted concat "bar2foo1foo_bar3foobar4", prefixed by "/test/api".
+    // We verified this hex by running our impl; locks the algorithm.
+    const sig = signRequest({
+      appSecret: "secret",
+      apiPath: "/test/api",
+      params: { foo: "1", bar: "2", foo_bar: "3", foobar: "4" },
+    });
+    expect(sig).toBe(
+      "C9E42CE09BA9FE95ECCB17111AA4E3F41D1C82F000435219C75936A427D9C945",
     );
   });
 
@@ -71,16 +81,18 @@ describe("signRequest", () => {
     expect(a).toBe(b);
   });
 
-  it("reproduces the documented Java-sample algorithm structure", () => {
-    // The docs' worked example: params {foo:1, bar:2, foo_bar:3, foobar:4}
-    // sorted → bar2foo1foo_bar3foobar4, prefixed with /test/api.
-    // We can't verify the hex (docs don't publish their secret) but we can
-    // assert our concatenation yields the same shape.
-    const sig = signRequest({
-      appSecret: "secret",
-      apiPath: "/test/api",
-      params: { foo: "1", bar: "2", foo_bar: "3", foobar: "4" },
+  it("incorporates the body suffix into the signed payload", () => {
+    const withoutBody = signRequest({
+      appSecret: "k",
+      apiPath: "/test",
+      params: { foo: "1" },
     });
-    expect(sig).toMatch(/^[0-9A-F]{64}$/);
+    const withBody = signRequest({
+      appSecret: "k",
+      apiPath: "/test",
+      params: { foo: "1" },
+      body: '{"a":1}',
+    });
+    expect(withoutBody).not.toBe(withBody);
   });
 });

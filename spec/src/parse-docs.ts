@@ -164,44 +164,56 @@ const PARAM_LINE = /^(\s*)-\s+`([^`]+)`\s*·\s*_([^_]+)_\s*·\s*\*\*(required|op
 
 /**
  * Parse a bullet-list of params where indentation controls nesting.
- * Base indent is the indent of the first line. Each 2 extra spaces = one level deeper.
+ *
+ * Each param line has a leading-whitespace width. A line with *greater* indent
+ * than the previous one becomes a child of the previous param. Equal indent is
+ * a sibling. Lesser indent pops back up the tree to the matching level.
+ *
+ * Each container (root + each param's `children`) is tagged with its "own
+ * indent" in `containerIndent`. Siblings at indent N live in the container
+ * tagged with indent N.
  */
-function parseParamBlock(block: string): Param[] {
-  const lines = block.split("\n").filter((l) => PARAM_LINE.test(l));
-  if (lines.length === 0) return [];
-
-  const firstMatch = PARAM_LINE.exec(lines[0]!)!;
-  const baseIndent = firstMatch[1]!.length;
+export function parseParamBlock(block: string): Param[] {
+  const matches: Array<{ indent: number; param: Param }> = [];
+  for (const line of block.split("\n")) {
+    const m = PARAM_LINE.exec(line);
+    if (!m) continue;
+    matches.push({
+      indent: m[1]!.length,
+      param: { name: m[2]!, type: m[3]!, required: m[4] === "required" },
+    });
+  }
+  if (matches.length === 0) return [];
 
   const root: Param[] = [];
-  const stack: Array<{ indent: number; params: Param[] }> = [{ indent: baseIndent - 2, params: root }];
+  // stack[i] is the list to push into for indent == stack[i].indent
+  const stack: Array<{ indent: number; list: Param[] }> = [
+    { indent: matches[0]!.indent, list: root },
+  ];
 
-  for (const line of lines) {
-    const m = PARAM_LINE.exec(line)!;
-    const indent = m[1]!.length;
-    const name = m[2]!;
-    const type = m[3]!;
-    const required = m[4] === "required";
-    const param: Param = { name, type, required };
-
-    // Pop stack entries whose indent >= current indent
-    while (stack.length > 1 && stack[stack.length - 1]!.indent >= indent) {
+  for (const { indent, param } of matches) {
+    // Pop any frames whose indent is greater than current (we've dedented).
+    while (stack.length > 1 && stack[stack.length - 1]!.indent > indent) {
       stack.pop();
     }
-    const parent = stack[stack.length - 1]!;
-    if (!parent.params) continue;
-    if (stack.length > 1 || parent.params === root) {
-      const host = parent.params;
-      const last = host[host.length - 1];
-      if (indent > parent.indent && last) {
-        last.children ??= [];
-        last.children.push(param);
-        stack.push({ indent, params: last.children });
-      } else {
-        host.push(param);
-        // Replace top of stack to represent this level
-        stack[stack.length - 1] = { indent, params: host };
+
+    const top = stack[stack.length - 1]!;
+    if (indent === top.indent) {
+      top.list.push(param);
+    } else if (indent > top.indent) {
+      // New deeper level: attach as children of the last sibling on top.
+      const last = top.list[top.list.length - 1];
+      if (!last) {
+        // No sibling to parent under — anomalous input, treat as sibling.
+        top.list.push(param);
+        continue;
       }
+      last.children ??= [];
+      last.children.push(param);
+      stack.push({ indent, list: last.children });
+    } else {
+      // indent < top.indent after popping — shouldn't happen, but be resilient.
+      top.list.push(param);
     }
   }
   return root;

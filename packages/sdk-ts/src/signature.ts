@@ -16,14 +16,22 @@ import { createHmac } from "node:crypto";
 export function signRequest(args: {
   appSecret: string;
   apiPath: string;
-  params: Record<string, string | number | boolean | undefined | null>;
+  /**
+   * All values must already be stringified by the caller. We don't accept
+   * number/boolean here — stringification of floats and locale-sensitive
+   * values is the caller's responsibility to avoid round-trip drift vs.
+   * Lazada's server.
+   */
+  params: Record<string, string | undefined | null>;
   body?: string;
 }): string {
   const { appSecret, apiPath, params, body } = args;
 
   const entries = Object.entries(params)
-    .filter(([k, v]) => k !== "sign" && v !== undefined && v !== null && v !== "")
-    .map(([k, v]) => [k, String(v)] as const)
+    .filter((entry): entry is [string, string] => {
+      const [k, v] = entry;
+      return k !== "sign" && v !== undefined && v !== null && v !== "";
+    })
     .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
 
   let payload = apiPath;

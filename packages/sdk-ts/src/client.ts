@@ -64,7 +64,7 @@ export function createLazadaClient(config: LazadaConfig): ReturnType<typeof crea
         return response;
       }
       const code = parsed.code !== undefined ? String(parsed.code) : "0";
-      if (code !== "0" && code !== "") {
+      if (code !== "0") {
         throw classifyError({
           code,
           type: typeof parsed.type === "string" ? parsed.type : "",

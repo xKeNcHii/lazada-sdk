@@ -69,6 +69,6 @@ export function classifyError(args: {
 }): LazadaApiError {
   if (AUTH_CODES.has(args.code)) return new LazadaAuthError(args);
   if (RATE_LIMIT_CODES.has(args.code)) return new LazadaRateLimitError(args);
-  if (args.type === "ISP" || /^E00[0-9]+$/.test(args.code)) return new LazadaValidationError(args);
+  if (args.type === "ISP" || /^E\d+$/.test(args.code)) return new LazadaValidationError(args);
   return new LazadaApiError(args);
 }
