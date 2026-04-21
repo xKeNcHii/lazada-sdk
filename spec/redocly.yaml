@@ -1,0 +1,14 @@
+extends:
+  - minimal
+rules:
+  # Lazada APIs aren't versioned by URL path (signatures carry the version concern)
+  no-server-variables-empty-enum: off
+  # Our operationIds are generated from Lazada method names and tags
+  operation-operationId-unique: warn
+  # We emit `summary` not `description` for operations (legal posture)
+  operation-description: off
+  operation-4xx-response: off
+  no-path-trailing-slash: warn
+  tag-description: off
+  info-contact: off
+  info-license: off

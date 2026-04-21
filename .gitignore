@@ -5,4 +5,7 @@ __pycache__/
 .obsidian/workspace.json
 node_modules/
 dist/
+*.tsbuildinfo
+.turbo/
+coverage/
 .DS_Store

@@ -1,3 +1,31 @@
+# lazada-sdk
+
+Unofficial TypeScript SDK for the Lazada Open Platform API — derived from the public docs, built as a pnpm monorepo of a markdown→OpenAPI parser (`@lazada-sdk/spec`) and a runtime SDK (`@lazada-sdk/sdk`).
+
+Not affiliated with Lazada. See [plan](./docs/PLAN.md) (if checked in) for architecture.
+
+## Quick start
+
+```bash
+pnpm install
+pnpm spec:build          # parse docs/ → spec/openapi/lazada.openapi.yaml
+pnpm --filter @lazada-sdk/sdk gen:types
+pnpm -r build
+```
+
+## Layout
+
+- `scraper/` — Python scraper that fetches and converts Lazada's docs to markdown.
+- `docs/` — scraped markdown (local mirror; not published on npm).
+- `spec/` — parser that converts `docs/api/*.md` → OpenAPI 3.1 YAML.
+- `packages/sdk-ts/` — TypeScript SDK; types are generated from the OpenAPI spec, managers are hand-written name-mapping wrappers.
+
+## Status
+
+v0.0.1 scaffolding. The signing layer, OpenAPI emission, and a few example managers (Order, Seller, System) are wired up. Remaining managers are bootstrapped from the spec in a follow-up pass.
+
+---
+
 # Lazada Open Platform docs (local mirror)
 
 Scraped from <https://open.lazada.com/apps/doc/api> on 2026-04-21.

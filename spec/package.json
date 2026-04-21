@@ -1,0 +1,31 @@
+{
+  "name": "@lazada-sdk/spec",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/parse-docs.js",
+  "bin": {
+    "lazada-parse-docs": "./dist/parse-docs.js"
+  },
+  "scripts": {
+    "build": "tsc && node dist/parse-docs.js",
+    "parse": "tsx src/parse-docs.ts",
+    "lint": "redocly lint openapi/lazada.openapi.yaml",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "mdast-util-from-markdown": "^2.0.2",
+    "mdast-util-gfm": "^3.1.0",
+    "micromark-extension-gfm": "^3.0.0"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^1.34.5",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
