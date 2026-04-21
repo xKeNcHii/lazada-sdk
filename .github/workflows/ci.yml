@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Parse docs → OpenAPI
+        run: pnpm --filter @lazada-sdk/spec exec tsx src/parse-docs.ts
+      - name: Lint OpenAPI spec
+        run: pnpm --filter @lazada-sdk/spec exec redocly lint openapi/lazada.openapi.yaml --config redocly.yaml
+      - name: Generate types
+        run: pnpm --filter @lazada-sdk/sdk gen:types
+      - name: Typecheck
+        run: pnpm -r typecheck
+      - name: Test
+        run: pnpm -r test
+      - name: Build
+        run: pnpm --filter @lazada-sdk/sdk build

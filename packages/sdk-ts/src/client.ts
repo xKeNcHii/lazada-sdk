@@ -24,8 +24,11 @@ export function createLazadaClient(config: LazadaConfig): ReturnType<typeof crea
     async onRequest({ request }) {
       const url = new URL(request.url);
       const apiPath = url.pathname;
-      const correctBase = resolveBaseUrl(config, apiPath);
-      const correctUrl = new URL(apiPath + url.search, correctBase);
+      const correctBase = resolveBaseUrl(config, apiPath).replace(/\/$/, "");
+      // `apiPath` starts with `/`; concat with base so the base's own pathname
+      // (e.g. `/rest`) is preserved — `new URL("/x", "https://h/rest")` would
+      // drop the `/rest`.
+      const correctUrl = new URL(correctBase + apiPath + url.search);
 
       const params: Record<string, string> = {};
       for (const [k, v] of correctUrl.searchParams.entries()) params[k] = v;

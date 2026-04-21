@@ -1,0 +1,23 @@
+import { BaseManager } from "./base.manager.js";
+import type { paths } from "../schemas/generated.js";
+
+type Q<P extends keyof paths, M extends keyof paths[P]> =
+  paths[P][M] extends { parameters: { query?: infer X } } ? X : never;
+type B<P extends keyof paths, M extends keyof paths[P]> =
+  paths[P][M] extends { requestBody: { content: { "application/json": infer X } } } ? X : never;
+
+/**
+ * Auto-generated manager for `store-decoration-api`. Method names follow the path-segment
+ * heuristic; rename as needed. Do not hand-edit the imports section —
+ * bootstrap --force will rewrite this file.
+ */
+export class StoreDecorationManager extends BaseManager {
+  getStoreCustomPage(params: Q<"/store/custom/page/get", "get">) {
+    return this.client.GET("/store/custom/page/get", { params: { query: params } });
+  }
+
+  getStoreCustomPage_2(body: B<"/store/custom/page/get", "post">) {
+    return this.client.POST("/store/custom/page/get", { body });
+  }
+
+}
