@@ -30,28 +30,64 @@ export function createLazadaClient(config: LazadaConfig): ReturnType<typeof crea
       // drop the `/rest`.
       const correctUrl = new URL(correctBase + apiPath + url.search);
 
-      const params: Record<string, string> = {};
-      for (const [k, v] of correctUrl.searchParams.entries()) params[k] = v;
+      // URL-level params: existing query + injected auth + sign.
+      // Signing params: URL-level params ∪ form body fields (all in one pool).
+      const urlParams: Record<string, string> = {};
+      for (const [k, v] of correctUrl.searchParams.entries()) urlParams[k] = v;
 
-      params.app_key = config.appKey;
-      params.timestamp = Date.now().toString();
-      params.sign_method = "sha256";
-      if (config.accessToken) params.access_token = config.accessToken;
-
-      let body: string | undefined;
-      if (request.body) {
-        body = await request.clone().text();
+      // Lazada POST convention: body is application/x-www-form-urlencoded
+      // with each top-level key as a form field. Every form field participates
+      // in signing but goes into the body only — NOT duplicated in URL query.
+      // Complex values are JSON-stringified before form-encoding. There's no
+      // raw body suffix in the signed payload; the Java "body" branch only
+      // applies to genuinely opaque (binary) bodies, none in our surface.
+      const formFields: Record<string, string> = {};
+      let formBody: string | undefined;
+      if (request.method !== "GET" && request.body) {
+        const raw = await request.clone().text();
+        if (raw) {
+          let parsed: unknown;
+          try {
+            parsed = JSON.parse(raw);
+          } catch {
+            parsed = undefined;
+          }
+          if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+            const form = new URLSearchParams();
+            for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+              if (v === undefined || v === null) continue;
+              const strVal = typeof v === "object" ? JSON.stringify(v) : String(v);
+              formFields[k] = strVal;
+              form.set(k, strVal);
+            }
+            formBody = form.toString();
+          }
+        }
       }
 
-      params.sign = signRequest({
+      urlParams.app_key = config.appKey;
+      urlParams.timestamp = Date.now().toString();
+      urlParams.sign_method = "sha256";
+      if (config.accessToken) urlParams.access_token = config.accessToken;
+
+      urlParams.sign = signRequest({
         appSecret: config.appSecret,
         apiPath,
-        params,
-        body,
+        params: { ...urlParams, ...formFields },
       });
 
       correctUrl.search = "";
-      for (const [k, v] of Object.entries(params)) correctUrl.searchParams.set(k, v);
+      for (const [k, v] of Object.entries(urlParams)) correctUrl.searchParams.set(k, v);
+
+      if (formBody !== undefined) {
+        const headers = new Headers(request.headers);
+        headers.set("content-type", "application/x-www-form-urlencoded");
+        return new Request(correctUrl, {
+          method: request.method,
+          headers,
+          body: formBody,
+        });
+      }
 
       return new Request(correctUrl, request);
     },

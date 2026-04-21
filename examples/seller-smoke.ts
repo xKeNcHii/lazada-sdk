@@ -7,7 +7,7 @@
  * and prints the response. Verifies end-to-end signing, routing, and
  * error decoding against the real Lazada API.
  */
-import { LazadaSDK } from "@lazada-sdk/sdk";
+import { LazadaSDK } from "../packages/sdk-ts/src/index.js";
 
 function requireEnv(name: string): string {
   const v = process.env[name];

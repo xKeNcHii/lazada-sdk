@@ -84,6 +84,40 @@ describe("client middleware", () => {
     await expect(sdk.seller.get()).rejects.toThrow(LazadaAuthError);
   });
 
+  it("form-encodes POST bodies and folds fields into the signing pool", async () => {
+    let captured: {
+      contentType: string | null;
+      body: string;
+      signingInputsOk: boolean;
+    } | null = null;
+    server.use(
+      http.post("https://api.lazada.sg/rest/images/migrate", async ({ request }) => {
+        const body = await request.text();
+        const form = new URLSearchParams(body);
+        const u = new URL(request.url);
+        // Signing params should include the form field `payload` but NOT have
+        // the raw JSON appended (the old buggy behavior did that).
+        captured = {
+          contentType: request.headers.get("content-type"),
+          body,
+          signingInputsOk:
+            form.has("payload") &&
+            u.searchParams.get("sign") !== null &&
+            !u.searchParams.has("payload"),
+        };
+        return HttpResponse.json({ code: "0", batch_id: "fake" });
+      }),
+    );
+    const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
+    await sdk.client.POST("/images/migrate", {
+      body: { payload: { images: ["https://x/y.jpg"] } } as never,
+    });
+    expect(captured).not.toBeNull();
+    expect(captured!.contentType).toMatch(/application\/x-www-form-urlencoded/);
+    expect(captured!.body).toMatch(/^payload=/);
+    expect(captured!.signingInputsOk).toBe(true);
+  });
+
   it("produces a deterministic signature for the same request", async () => {
     const seen: string[] = [];
     server.use(
