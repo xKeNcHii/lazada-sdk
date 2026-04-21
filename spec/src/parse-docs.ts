@@ -142,7 +142,7 @@ function paramsToSchema(
  * Split a Lazada API file into per-endpoint chunks.
  * Each chunk starts at a `## ` line (not H1 `# `) and ends before the next `## ` or EOF.
  */
-function splitEndpoints(md: string): string[] {
+export function splitEndpoints(md: string): string[] {
   const lines = md.split("\n");
   const chunks: string[] = [];
   let current: string[] = [];
@@ -235,7 +235,7 @@ function extractSection(chunk: string, label: string): string | null {
   return null;
 }
 
-function parseEndpoint(chunk: string, file: string): Endpoint | null {
+export function parseEndpoint(chunk: string, file: string): Endpoint | null {
   const titleMatch = /^##\s+(.+?)\s*$/m.exec(chunk);
   const pathMatch = /^-\s+\*\*Path\*\*:\s*`([^`]+)`/m.exec(chunk);
   const methodMatch = /^-\s+\*\*Method\*\*:\s*`([^`]+)`/m.exec(chunk);
@@ -424,8 +424,16 @@ async function main(): Promise<void> {
   console.log(`Wrote ${OUT_FILE}`);
 }
 
-main().catch((err) => {
-  // eslint-disable-next-line no-console
-  console.error(err);
-  process.exit(1);
-});
+// Only run when invoked as a script (tsx src/parse-docs.ts), not on import.
+const invokedAsScript =
+  import.meta.url === `file://${process.argv[1]}` ||
+  import.meta.url.endsWith(process.argv[1] ?? "");
+if (invokedAsScript) {
+  main().catch((err) => {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    process.exit(1);
+  });
+}
+
+export type { Endpoint, Param };

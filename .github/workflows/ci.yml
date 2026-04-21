@@ -26,5 +26,7 @@ jobs:
         run: pnpm -r typecheck
       - name: Test
         run: pnpm -r test
+      - name: Test coverage (sdk-ts)
+        run: pnpm --filter @lazada-sdk/sdk test:coverage
       - name: Build
         run: pnpm --filter @lazada-sdk/sdk build

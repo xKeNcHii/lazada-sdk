@@ -118,6 +118,91 @@ describe("client middleware", () => {
     expect(captured!.signingInputsOk).toBe(true);
   });
 
+  it("form-encodes a body with multiple top-level primitive fields", async () => {
+    let form: URLSearchParams | null = null;
+    let signedPool: Record<string, string> | null = null;
+    server.use(
+      http.post("https://api.lazada.sg/rest/orders/get", async ({ request }) => {
+        form = new URLSearchParams(await request.text());
+        const u = new URL(request.url);
+        signedPool = Object.fromEntries(u.searchParams.entries());
+        return HttpResponse.json({ code: "0", data: [] });
+      }),
+    );
+    const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
+    await sdk.client.POST("/orders/get", {
+      body: { created_after: "2024-01-01", limit: 50, status: "pending" } as never,
+    });
+    expect(form!.get("created_after")).toBe("2024-01-01");
+    expect(form!.get("limit")).toBe("50");
+    expect(form!.get("status")).toBe("pending");
+    // Form fields MUST NOT be duplicated into the URL query.
+    expect(signedPool!).not.toHaveProperty("created_after");
+    expect(signedPool!).not.toHaveProperty("limit");
+  });
+
+  it("JSON-stringifies object/array values in form-encoded bodies", async () => {
+    let form: URLSearchParams | null = null;
+    server.use(
+      http.post("https://api.lazada.sg/rest/images/migrate", async ({ request }) => {
+        form = new URLSearchParams(await request.text());
+        return HttpResponse.json({ code: "0", batch_id: "x" });
+      }),
+    );
+    const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
+    const payload = { images: ["https://a/b.jpg", "https://a/c.jpg"] };
+    await sdk.client.POST("/images/migrate", {
+      body: { payload } as never,
+    });
+    expect(form!.get("payload")).toBe(JSON.stringify(payload));
+  });
+
+  it("drops undefined/null fields from the form body", async () => {
+    let form: URLSearchParams | null = null;
+    server.use(
+      http.post("https://api.lazada.sg/rest/orders/get", async ({ request }) => {
+        form = new URLSearchParams(await request.text());
+        return HttpResponse.json({ code: "0" });
+      }),
+    );
+    const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
+    await sdk.client.POST("/orders/get", {
+      body: { a: "1", b: undefined, c: null, d: "2" } as never,
+    });
+    expect(form!.get("a")).toBe("1");
+    expect(form!.get("d")).toBe("2");
+    expect(form!.has("b")).toBe(false);
+    expect(form!.has("c")).toBe(false);
+  });
+
+  it("signs form fields in the same pool as query params", async () => {
+    let firstSign = "";
+    let secondSign = "";
+    let calls = 0;
+    server.use(
+      http.post("https://api.lazada.sg/rest/orders/get", ({ request }) => {
+        const sign = new URL(request.url).searchParams.get("sign") ?? "";
+        if (calls === 0) firstSign = sign;
+        else secondSign = sign;
+        calls++;
+        return HttpResponse.json({ code: "0" });
+      }),
+    );
+    const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
+    const origDateNow = Date.now;
+    Date.now = () => 1_700_000_000_000;
+    try {
+      await sdk.client.POST("/orders/get", { body: { x: "1" } as never });
+      await sdk.client.POST("/orders/get", { body: { x: "2" } as never });
+    } finally {
+      Date.now = origDateNow;
+    }
+    // Different body fields must produce different signatures — proving they
+    // are part of the signing pool and not ignored.
+    expect(firstSign).not.toBe(secondSign);
+    expect(firstSign).toMatch(/^[0-9A-F]{64}$/);
+  });
+
   it("produces a deterministic signature for the same request", async () => {
     const seen: string[] = [];
     server.use(
