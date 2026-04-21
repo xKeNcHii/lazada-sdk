@@ -87,6 +87,24 @@ and you need to match that transport, reach for the raw client:
 await sdk.client.GET("/choice/products/get", { params: { query: { ... } } });
 ```
 
+## Pagination
+
+Lazada list endpoints come in two flavors — offset-based (`{ offset, limit, total }`) and cursor-based (`{ cursor, next_cursor }`). The exported `paginate()` helper auto-detects which one a response is using and yields items as an async iterator:
+
+```ts
+import { LazadaSDK, paginate } from "@lazada-sdk/sdk";
+
+for await (const order of paginate(
+  (p) => sdk.order.getOrders(p),
+  { created_after: "2025-01-01", status: "pending" },
+  { itemsKey: "orders", pageSize: 50, maxItems: 1000 },
+)) {
+  console.log(order);
+}
+```
+
+`itemsKey` tells the helper which array inside `data` to iterate (e.g. `"orders"`, `"products"`, `"items"`). `maxItems` caps the total yielded as a runaway-loop guard.
+
 ## Error handling
 
 ```ts
