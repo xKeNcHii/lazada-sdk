@@ -1,0 +1,8 @@
+scraper/venv/
+__pycache__/
+*.pyc
+.obsidian/workspace*.json
+.obsidian/workspace.json
+node_modules/
+dist/
+.DS_Store
