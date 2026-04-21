@@ -1,6 +1,6 @@
 {
   "name": "@lazada-sdk/sdk",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.0",
   "description": "Unofficial TypeScript SDK for the Lazada Open Platform API. Not affiliated with Lazada.",
   "license": "MIT",
   "type": "module",
