@@ -12,10 +12,6 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class LazlikeManager extends BaseManager {
-  getContentMcnContentQuerytaginfosbyname(params: Q<"/content/mcn/content/queryTagInfosByName", "get">) {
-    return this.client.GET("/content/mcn/content/queryTagInfosByName", { params: { query: params } });
-  }
-
   postContentMcnContentQuerytaginfosbyname(body: B<"/content/mcn/content/queryTagInfosByName", "post">) {
     return this.client.POST("/content/mcn/content/queryTagInfosByName", { body });
   }
@@ -32,11 +28,7 @@ export class LazlikeManager extends BaseManager {
     return this.client.POST("/content/mcn/content/create", { body });
   }
 
-  createContentMcnVideoBlock(params: Q<"/content/mcn/video/block/create", "get">) {
-    return this.client.GET("/content/mcn/video/block/create", { params: { query: params } });
-  }
-
-  createContentMcnVideoBlock_2(body: B<"/content/mcn/video/block/create", "post">) {
+  createContentMcnVideoBlock(body: B<"/content/mcn/video/block/create", "post">) {
     return this.client.POST("/content/mcn/video/block/create", { body });
   }
 
@@ -45,10 +37,6 @@ export class LazlikeManager extends BaseManager {
   }
 
   listContentMcnProperty() {
-    return this.client.GET("/content/mcn/property/list", {});
-  }
-
-  listContentMcnProperty_2() {
     return this.client.POST("/content/mcn/property/list", {});
   }
 
@@ -68,16 +56,8 @@ export class LazlikeManager extends BaseManager {
     return this.client.GET("/content/mcn/product/validate", { params: { query: params } });
   }
 
-  searchContentMcnSimilarProduct(params: Q<"/content/mcn/similar/product/search", "get">) {
-    return this.client.GET("/content/mcn/similar/product/search", { params: { query: params } });
-  }
-
-  searchContentMcnSimilarProduct_2(body: B<"/content/mcn/similar/product/search", "post">) {
+  searchContentMcnSimilarProduct(body: B<"/content/mcn/similar/product/search", "post">) {
     return this.client.POST("/content/mcn/similar/product/search", { body });
-  }
-
-  getContentMcnContentQueryreviewrecords(params: Q<"/content/mcn/content/queryReviewRecords", "get">) {
-    return this.client.GET("/content/mcn/content/queryReviewRecords", { params: { query: params } });
   }
 
   postContentMcnContentQueryreviewrecords(body: B<"/content/mcn/content/queryReviewRecords", "post">) {

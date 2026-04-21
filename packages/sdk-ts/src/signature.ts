@@ -1,5 +1,3 @@
-import { createHmac } from "node:crypto";
-
 /**
  * Compute a Lazada Open Platform request signature.
  *
@@ -12,8 +10,10 @@ import { createHmac } from "node:crypto";
  * The `sign` parameter itself is excluded from the input to signing (obviously).
  * Byte-array parameters are also excluded per Lazada's spec, but we don't expose
  * those in the OpenAPI schema — if a caller passes one as a string, it's signed.
+ *
+ * Uses WebCrypto (available in Node ≥20, browsers, Cloudflare Workers, Vercel Edge).
  */
-export function signRequest(args: {
+export async function signRequest(args: {
   appSecret: string;
   apiPath: string;
   /**
@@ -24,7 +24,7 @@ export function signRequest(args: {
    */
   params: Record<string, string | undefined | null>;
   body?: string;
-}): string {
+}): Promise<string> {
   const { appSecret, apiPath, params, body } = args;
 
   const entries = Object.entries(params)
@@ -40,5 +40,19 @@ export function signRequest(args: {
   }
   if (body) payload += body;
 
-  return createHmac("sha256", appSecret).update(payload, "utf8").digest("hex").toUpperCase();
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(appSecret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sigBuf = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
+  const bytes = new Uint8Array(sigBuf);
+  let hex = "";
+  for (let i = 0; i < bytes.length; i++) {
+    hex += bytes[i]!.toString(16).padStart(2, "0");
+  }
+  return hex.toUpperCase();
 }

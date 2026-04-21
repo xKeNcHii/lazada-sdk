@@ -12,7 +12,7 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class FlexicomboManager extends BaseManager {
-  postPromotionFlexicomboActivate(body: B<"/promotion/flexicombo/activate", "post">) {
+  activatePromotionFlexicombo(body: B<"/promotion/flexicombo/activate", "post">) {
     return this.client.POST("/promotion/flexicombo/activate", { body });
   }
 
@@ -24,7 +24,7 @@ export class FlexicomboManager extends BaseManager {
     return this.client.POST("/promotion/flexicombo/create", { body });
   }
 
-  postPromotionFlexicomboDeactivate(body: B<"/promotion/flexicombo/deactivate", "post">) {
+  deactivatePromotionFlexicombo(body: B<"/promotion/flexicombo/deactivate", "post">) {
     return this.client.POST("/promotion/flexicombo/deactivate", { body });
   }
 

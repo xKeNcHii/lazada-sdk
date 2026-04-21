@@ -1,6 +1,6 @@
 {
   "name": "@lazada-sdk/spec",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "main": "./dist/parse-docs.js",
@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc && node dist/parse-docs.js",
     "parse": "tsx src/parse-docs.ts",
+    "bootstrap:managers": "tsx src/bootstrap-managers.ts",
     "lint": "redocly lint openapi/lazada.openapi.yaml",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"

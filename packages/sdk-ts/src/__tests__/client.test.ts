@@ -26,7 +26,7 @@ describe("client middleware", () => {
       region: "SG",
       accessToken: "TOKEN",
     });
-    const { data } = await sdk.seller.get();
+    const { data } = await sdk.seller.getSeller();
     expect(data).toBeDefined();
 
     expect(captured).not.toBeNull();
@@ -41,7 +41,7 @@ describe("client middleware", () => {
   it("routes auth endpoints to auth.lazada.com instead of the regional host", async () => {
     let hit = "";
     server.use(
-      http.get("https://auth.lazada.com/rest/auth/token/create", ({ request }) => {
+      http.post("https://auth.lazada.com/rest/auth/token/create", ({ request }) => {
         hit = new URL(request.url).host;
         return HttpResponse.json({ code: "0", access_token: "X" });
       }),
@@ -51,7 +51,7 @@ describe("client middleware", () => {
       appSecret: "S",
       region: "SG",
     });
-    await sdk.system.generateAccessToken({ code: "oauth-code" });
+    await sdk.system.createAuthToken({ code: "oauth-code" } as never);
     expect(hit).toBe("auth.lazada.com");
   });
 
@@ -67,7 +67,7 @@ describe("client middleware", () => {
       ),
     );
     const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
-    await expect(sdk.seller.get()).rejects.toThrow(LazadaApiError);
+    await expect(sdk.seller.getSeller()).rejects.toThrow(LazadaApiError);
   });
 
   it("classifies auth-family errors as LazadaAuthError", async () => {
@@ -81,7 +81,7 @@ describe("client middleware", () => {
       ),
     );
     const sdk = new LazadaSDK({ appKey: "K", appSecret: "S", region: "SG", accessToken: "T" });
-    await expect(sdk.seller.get()).rejects.toThrow(LazadaAuthError);
+    await expect(sdk.seller.getSeller()).rejects.toThrow(LazadaAuthError);
   });
 
   it("form-encodes POST bodies and folds fields into the signing pool", async () => {
@@ -216,8 +216,8 @@ describe("client middleware", () => {
     const orig = Date.now;
     Date.now = () => 1_700_000_000_000;
     try {
-      await sdk.seller.get();
-      await sdk.seller.get();
+      await sdk.seller.getSeller();
+      await sdk.seller.getSeller();
     } finally {
       Date.now = orig;
     }

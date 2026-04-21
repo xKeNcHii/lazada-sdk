@@ -16,7 +16,7 @@ export class SellerVoucherManager extends BaseManager {
     return this.client.POST("/promotion/voucher/product/sku/remove", { body });
   }
 
-  postPromotionVoucherActivate(body: B<"/promotion/voucher/activate", "post">) {
+  activatePromotionVoucher(body: B<"/promotion/voucher/activate", "post">) {
     return this.client.POST("/promotion/voucher/activate", { body });
   }
 
@@ -28,7 +28,7 @@ export class SellerVoucherManager extends BaseManager {
     return this.client.POST("/promotion/voucher/create", { body });
   }
 
-  postPromotionVoucherDeactivate(body: B<"/promotion/voucher/deactivate", "post">) {
+  deactivatePromotionVoucher(body: B<"/promotion/voucher/deactivate", "post">) {
     return this.client.POST("/promotion/voucher/deactivate", { body });
   }
 

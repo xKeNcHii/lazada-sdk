@@ -54,19 +54,24 @@ function toCamel(pascal: string): string {
   return pascal[0]!.toLowerCase() + pascal.slice(1);
 }
 
+// Last-segment verbs that name the method on their own; noun comes from parent segments.
+// Expanded to cover the common Lazada action vocabulary.
+const LAST_SEG_VERBS = new Set([
+  "get", "create", "update", "cancel", "list", "delete", "upload", "search",
+  "sync", "add", "remove", "set", "query", "confirm", "submit", "approve",
+  "reject", "dispatch", "pack", "ship", "bind", "unbind", "activate",
+  "deactivate", "send", "reply", "close", "open", "find", "apply", "renew",
+  "refund", "print", "save", "enable", "disable", "check", "verify", "refresh",
+]);
+
 function methodName(path: string, method: "get" | "post"): string {
   const segs = path.split("/").filter(Boolean);
   const last = segs[segs.length - 1] ?? "";
   const rest = segs.slice(0, -1);
-
-  // Common Lazada verbs appearing as last segment
-  const verbs = new Set(["get", "create", "update", "cancel", "list", "delete", "upload", "search", "sync", "add", "remove", "set", "query"]);
-  if (verbs.has(last.toLowerCase())) {
-    // verb + remaining path as noun: e.g. ["orders","get"] → getOrders
+  if (LAST_SEG_VERBS.has(last.toLowerCase())) {
     const noun = rest.map(toPascal).join("");
     return toCamel(toPascal(last) + noun);
   }
-  // Fallback: verb from HTTP method + whole path as noun
   const verb = method === "post" ? "post" : "get";
   const noun = segs.map(toPascal).join("");
   return `${verb}${noun}`;
@@ -95,13 +100,91 @@ interface ManagerMethod {
   hasBody: boolean;
 }
 
+/**
+ * Produce a collision-free list of method names within a single manager.
+ *
+ * Strategy: start with the short name from `methodName()`. If two methods
+ * share it, extend each colliding name by folding in the next parent path
+ * segment (most-specific-first). Repeat until unique. This yields readable
+ * disambiguated names like `cancelOrder` / `cancelRma` rather than `cancel_2`.
+ */
+function disambiguate(methods: ManagerMethod[]): ManagerMethod[] {
+  const working = methods.map((m) => ({
+    m,
+    segs: m.path.split("/").filter(Boolean),
+    // How many parent segments have been folded into the name so far.
+    depth: 0,
+    name: m.name,
+  }));
+
+  const countByName = () => {
+    const c = new Map<string, number>();
+    for (const w of working) c.set(w.name, (c.get(w.name) ?? 0) + 1);
+    return c;
+  };
+
+  // Iteratively extend colliding names. Bounded by longest path depth.
+  for (let iter = 0; iter < 10; iter++) {
+    const counts = countByName();
+    const colliding = working.filter((w) => (counts.get(w.name) ?? 0) > 1);
+    if (colliding.length === 0) break;
+
+    for (const w of colliding) {
+      const last = w.segs[w.segs.length - 1] ?? "";
+      const isVerbLast = LAST_SEG_VERBS.has(last.toLowerCase());
+      // Which segment to pull next as a disambiguating noun. For verb-last
+      // paths, parents are segs[0..len-2]; we've already consumed `depth` of
+      // them from the tail end. Pull the next one (from the tail moving left).
+      const parentSegs = isVerbLast ? w.segs.slice(0, -1) : w.segs;
+      const idx = parentSegs.length - 1 - w.depth;
+      if (idx < 0) continue; // exhausted — fall through to numeric suffix below
+      const extra = toPascal(parentSegs[idx] ?? "");
+      if (!extra) continue;
+      // For verb-last: verb + extra + existing-noun-tail. For non-verb-last
+      // (already `get/post + full path`), the base name already contains all
+      // segments, so extension is a no-op — numeric suffix will handle it.
+      if (isVerbLast) {
+        // Rebuild: verb + (parentSegs[idx..end]).map(toPascal)
+        const noun = parentSegs.slice(idx).map(toPascal).join("");
+        w.name = toCamel(toPascal(last) + noun);
+        w.depth++;
+      } else {
+        w.depth++; // nothing to extend; will fall into numeric suffix
+      }
+    }
+  }
+
+  // Final numeric-suffix fallback for any residual collisions.
+  const finalCounts = countByName();
+  const seen = new Map<string, number>();
+  return working.map(({ m, name }) => {
+    const total = finalCounts.get(name) ?? 1;
+    if (total === 1) return { ...m, name };
+    const n = (seen.get(name) ?? 0) + 1;
+    seen.set(name, n);
+    return { ...m, name: n === 1 ? name : `${name}${n}` };
+  });
+}
+
 async function main(): Promise<void> {
   const spec = yamlLoad(await readFile(SPEC_FILE, "utf8")) as Spec;
   const byTag = new Map<string, ManagerMethod[]>();
 
   for (const [path, methods] of Object.entries(spec.paths)) {
-    for (const [httpMethod, op] of Object.entries(methods)) {
-      if (httpMethod !== "get" && httpMethod !== "post") continue;
+    // Lazada registers many endpoints as both GET (small payloads via query)
+    // and POST (same semantics, form-encoded body for larger payloads). The
+    // two variants have identical meaning, so we expose only one method per
+    // path. POST wins when both exist: it handles arbitrarily large payloads
+    // and the signing middleware treats GET/POST payloads identically. Users
+    // who specifically need the GET transport can reach for the raw
+    // `sdk.client.GET(path, ...)` escape hatch.
+    const httpMethods: Array<"get" | "post"> = [];
+    if ("post" in methods) httpMethods.push("post");
+    else if ("get" in methods) httpMethods.push("get");
+
+    for (const httpMethod of httpMethods) {
+      const op = methods[httpMethod];
+      if (!op) continue;
       const tag = op.tags?.[0];
       if (!tag) continue;
       const params = op.parameters as unknown[] | undefined;
@@ -126,13 +209,11 @@ async function main(): Promise<void> {
   let skipped = 0;
 
   for (const [tag, rawMethods] of Array.from(byTag.entries()).sort()) {
-    // Dedupe method names within this manager
-    const seen = new Map<string, number>();
-    const methods = rawMethods.map((m) => {
-      const count = (seen.get(m.name) ?? 0) + 1;
-      seen.set(m.name, count);
-      return count > 1 ? { ...m, name: `${m.name}_${count}` } : m;
-    });
+    // Dedupe method names within this manager by folding in the next parent
+    // path segment until names are unique. Falls back to numeric suffix only
+    // if even the full pascal-cased path collides (shouldn't happen in
+    // practice — the full-path name is inherently unique per method).
+    const methods = disambiguate(rawMethods);
 
     const fileName = managerFileName(tag);
     const className = managerClassName(tag);

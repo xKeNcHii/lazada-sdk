@@ -12,11 +12,7 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class ProductReviewManager extends BaseManager {
-  listReviewSellerHistory(params: Q<"/review/seller/history/list", "get">) {
-    return this.client.GET("/review/seller/history/list", { params: { query: params } });
-  }
-
-  listReviewSellerHistory_2(body: B<"/review/seller/history/list", "post">) {
+  listReviewSellerHistory(body: B<"/review/seller/history/list", "post">) {
     return this.client.POST("/review/seller/history/list", { body });
   }
 

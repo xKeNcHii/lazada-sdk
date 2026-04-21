@@ -12,19 +12,11 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class RedmartManager extends BaseManager {
-  getRssPickupJob(params: Q<"/rss/pickup-job/get", "get">) {
-    return this.client.GET("/rss/pickup-job/get", { params: { query: params } });
-  }
-
-  getRssPickupJob_2(body: B<"/rss/pickup-job/get", "post">) {
+  getRssPickupJob(body: B<"/rss/pickup-job/get", "post">) {
     return this.client.POST("/rss/pickup-job/get", { body });
   }
 
-  getRssPickupJobs(params: Q<"/rss/pickup-jobs/get", "get">) {
-    return this.client.GET("/rss/pickup-jobs/get", { params: { query: params } });
-  }
-
-  getRssPickupJobs_2(body: B<"/rss/pickup-jobs/get", "post">) {
+  getRssPickupJobs(body: B<"/rss/pickup-jobs/get", "post">) {
     return this.client.POST("/rss/pickup-jobs/get", { body });
   }
 
@@ -48,11 +40,7 @@ export class RedmartManager extends BaseManager {
     return this.client.GET("/rss/stockLots/get", { params: { query: params } });
   }
 
-  updateRssStocklot(params: Q<"/rss/stockLot/update", "get">) {
-    return this.client.GET("/rss/stockLot/update", { params: { query: params } });
-  }
-
-  updateRssStocklot_2(body: B<"/rss/stockLot/update", "post">) {
+  updateRssStocklot(body: B<"/rss/stockLot/update", "post">) {
     return this.client.POST("/rss/stockLot/update", { body });
   }
 

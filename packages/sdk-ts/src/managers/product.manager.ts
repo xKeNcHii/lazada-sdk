@@ -24,15 +24,11 @@ export class ProductManager extends BaseManager {
     return this.client.POST("/product/create", { body });
   }
 
-  postProductDeactivate(body: B<"/product/deactivate", "post">) {
+  deactivateProduct(body: B<"/product/deactivate", "post">) {
     return this.client.POST("/product/deactivate", { body });
   }
 
-  queryCategoryBrands(params: Q<"/category/brands/query", "get">) {
-    return this.client.GET("/category/brands/query", { params: { query: params } });
-  }
-
-  queryCategoryBrands_2(body: B<"/category/brands/query", "post">) {
+  queryCategoryBrands(body: B<"/category/brands/query", "post">) {
     return this.client.POST("/category/brands/query", { body });
   }
 
@@ -48,27 +44,15 @@ export class ProductManager extends BaseManager {
     return this.client.GET("/category/tree/get", { params: { query: params } });
   }
 
-  getCategoryCascadeGetnextcascadeprop(params: Q<"/category/cascade/getNextCascadeProp", "get">) {
-    return this.client.GET("/category/cascade/getNextCascadeProp", { params: { query: params } });
-  }
-
   postCategoryCascadeGetnextcascadeprop(body: B<"/category/cascade/getNextCascadeProp", "post">) {
     return this.client.POST("/category/cascade/getNextCascadeProp", { body });
-  }
-
-  getProductSellerItemGetpreqcrules(params: Q<"/product/seller/item/getPreQcRules", "get">) {
-    return this.client.GET("/product/seller/item/getPreQcRules", { params: { query: params } });
   }
 
   postProductSellerItemGetpreqcrules(body: B<"/product/seller/item/getPreQcRules", "post">) {
     return this.client.POST("/product/seller/item/getPreQcRules", { body });
   }
 
-  getProductContentScore(params: Q<"/product/content/score/get", "get">) {
-    return this.client.GET("/product/content/score/get", { params: { query: params } });
-  }
-
-  getProductContentScore_2(body: B<"/product/content/score/get", "post">) {
+  getProductContentScore(body: B<"/product/content/score/get", "post">) {
     return this.client.POST("/product/content/score/get", { body });
   }
 
@@ -96,11 +80,7 @@ export class ProductManager extends BaseManager {
     return this.client.GET("/size/chart/template/get", { params: { query: params } });
   }
 
-  getProductUnfilledAttribute(params: Q<"/product/unfilled/attribute/get", "get">) {
-    return this.client.GET("/product/unfilled/attribute/get", { params: { query: params } });
-  }
-
-  getProductUnfilledAttribute_2(body: B<"/product/unfilled/attribute/get", "post">) {
+  getProductUnfilledAttribute(body: B<"/product/unfilled/attribute/get", "post">) {
     return this.client.POST("/product/unfilled/attribute/get", { body });
   }
 
@@ -112,11 +92,7 @@ export class ProductManager extends BaseManager {
     return this.client.POST("/images/migrate", { body });
   }
 
-  getProductPreCheck(params: Q<"/product/pre/check", "get">) {
-    return this.client.GET("/product/pre/check", { params: { query: params } });
-  }
-
-  postProductPreCheck(body: B<"/product/pre/check", "post">) {
+  checkProductPre(body: B<"/product/pre/check", "post">) {
     return this.client.POST("/product/pre/check", { body });
   }
 
@@ -140,11 +116,7 @@ export class ProductManager extends BaseManager {
     return this.client.POST("/product/update", { body });
   }
 
-  updateProductStockSellable(params: Q<"/product/stock/sellable/update", "get">) {
-    return this.client.GET("/product/stock/sellable/update", { params: { query: params } });
-  }
-
-  updateProductStockSellable_2(body: B<"/product/stock/sellable/update", "post">) {
+  updateProductStockSellable(body: B<"/product/stock/sellable/update", "post">) {
     return this.client.POST("/product/stock/sellable/update", { body });
   }
 

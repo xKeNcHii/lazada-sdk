@@ -20,24 +20,12 @@ export class LogisticsManager extends BaseManager {
     return this.client.POST("/logistics/tps/stations/create", { body });
   }
 
-  getLogisticOrderTrace(params: Q<"/logistic/order/trace", "get">) {
-    return this.client.GET("/logistic/order/trace", { params: { query: params } });
-  }
-
   postLogisticOrderTrace(body: B<"/logistic/order/trace", "post">) {
     return this.client.POST("/logistic/order/trace", { body });
   }
 
-  getDopScan(params: Q<"/dop/scan", "get">) {
-    return this.client.GET("/dop/scan", { params: { query: params } });
-  }
-
   postDopScan(body: B<"/dop/scan", "post">) {
     return this.client.POST("/dop/scan", { body });
-  }
-
-  getStationsDopScan(params: Q<"/stations/dop/scan", "get">) {
-    return this.client.GET("/stations/dop/scan", { params: { query: params } });
   }
 
   postStationsDopScan(body: B<"/stations/dop/scan", "post">) {

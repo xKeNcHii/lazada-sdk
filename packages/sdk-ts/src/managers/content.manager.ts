@@ -32,10 +32,6 @@ export class ContentManager extends BaseManager {
     return this.client.GET("/content/ai/getTaskStatus", { params: { query: params } });
   }
 
-  getContentAiProductimagematch(params: Q<"/content/ai/productImageMatch", "get">) {
-    return this.client.GET("/content/ai/productImageMatch", { params: { query: params } });
-  }
-
   postContentAiProductimagematch(body: B<"/content/ai/productImageMatch", "post">) {
     return this.client.POST("/content/ai/productImageMatch", { body });
   }

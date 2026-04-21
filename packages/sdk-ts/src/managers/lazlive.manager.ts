@@ -12,10 +12,6 @@ type B<P extends keyof paths, M extends keyof paths[P]> =
  * bootstrap --force will rewrite this file.
  */
 export class LazliveManager extends BaseManager {
-  getLazliveProductHighlight(params: Q<"/lazlive/product/highlight", "get">) {
-    return this.client.GET("/lazlive/product/highlight", { params: { query: params } });
-  }
-
   postLazliveProductHighlight(body: B<"/lazlive/product/highlight", "post">) {
     return this.client.POST("/lazlive/product/highlight", { body });
   }

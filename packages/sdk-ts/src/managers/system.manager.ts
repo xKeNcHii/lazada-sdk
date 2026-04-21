@@ -1,20 +1,31 @@
 import { BaseManager } from "./base.manager.js";
 import type { paths } from "../schemas/generated.js";
 
-type AuthTokenCreateQuery =
-  paths["/auth/token/create"]["get"] extends { parameters: { query?: infer Q } } ? Q : never;
-type AuthTokenRefreshQuery =
-  paths["/auth/token/refresh"]["get"] extends { parameters: { query?: infer Q } } ? Q : never;
+type Q<P extends keyof paths, M extends keyof paths[P]> =
+  paths[P][M] extends { parameters: { query?: infer X } } ? X : never;
+type B<P extends keyof paths, M extends keyof paths[P]> =
+  paths[P][M] extends { requestBody: { content: { "application/json": infer X } } } ? X : never;
 
 /**
- * System API — auth token lifecycle.
+ * Auto-generated manager for `system-api`. Method names follow the path-segment
+ * heuristic; rename as needed. Do not hand-edit the imports section —
+ * bootstrap --force will rewrite this file.
  */
 export class SystemManager extends BaseManager {
-  generateAccessToken(params: AuthTokenCreateQuery) {
-    return this.client.GET("/auth/token/create", { params: { query: params } });
+  createAuthToken(body: B<"/auth/token/create", "post">) {
+    return this.client.POST("/auth/token/create", { body });
   }
 
-  refreshAccessToken(params: AuthTokenRefreshQuery) {
-    return this.client.GET("/auth/token/refresh", { params: { query: params } });
+  postAuthTokenCreatewithopenid(body: B<"/auth/token/createWithOpenId", "post">) {
+    return this.client.POST("/auth/token/createWithOpenId", { body });
   }
+
+  refreshAuthToken(body: B<"/auth/token/refresh", "post">) {
+    return this.client.POST("/auth/token/refresh", { body });
+  }
+
+  postFbiDownloadStartexportbydataset(body: B<"/fbi/download/startExportByDataset", "post">) {
+    return this.client.POST("/fbi/download/startExportByDataset", { body });
+  }
+
 }
