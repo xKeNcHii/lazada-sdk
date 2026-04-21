@@ -38,6 +38,7 @@
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "size": "size-limit",
     "typecheck": "tsc --noEmit",
     "gen:types": "openapi-typescript ../../spec/openapi/lazada.openapi.yaml -o src/schemas/generated.ts",
     "prepublishOnly": "pnpm gen:types && pnpm build"
@@ -49,7 +50,9 @@
     "@types/node": "^25.6.0",
     "msw": "^2.7.0",
     "openapi-typescript": "^7.4.4",
+    "@size-limit/preset-small-lib": "^11.1.6",
     "@vitest/coverage-v8": "^4.1.4",
+    "size-limit": "^11.1.6",
     "tsup": "^8.3.5",
     "typescript": "^6.0.3",
     "vite": "^6.0.0",
@@ -60,5 +63,30 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "size-limit": [
+    {
+      "name": "ESM full bundle",
+      "path": "dist/index.js",
+      "limit": "100 KB",
+      "gzip": true,
+      "ignore": ["crypto", "node:crypto"]
+    },
+    {
+      "name": "Signing + errors only (no managers, tree-shaken)",
+      "path": "dist/index.js",
+      "import": "{ signRequest, LazadaApiError }",
+      "limit": "5 KB",
+      "gzip": true,
+      "ignore": ["crypto", "node:crypto"]
+    },
+    {
+      "name": "SDK + Order + Seller managers (tree-shaken)",
+      "path": "dist/index.js",
+      "import": "{ LazadaSDK, OrderManager, SellerManager }",
+      "limit": "40 KB",
+      "gzip": true,
+      "ignore": ["crypto", "node:crypto"]
+    }
+  ]
 }

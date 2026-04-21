@@ -9,6 +9,10 @@ export {
   LazadaValidationError,
   classifyError,
 } from "./errors.js";
+export { TokenManager } from "./token-manager.js";
+export type { TokenManagerOptions } from "./token-manager.js";
+export { paginate } from "./pagination.js";
+export type { PaginateOptions } from "./pagination.js";
 export { MemoryTokenStorage } from "./storage/memory-token-storage.js";
 export type { TokenStorage, StoredToken } from "./storage/token-storage.interface.js";
 export { ChoiceCustomizedManager } from "./managers/choice-customized.manager.js";

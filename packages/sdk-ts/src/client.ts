@@ -3,6 +3,7 @@ import type { paths } from "./schemas/generated.js";
 import { resolveBaseUrl, type LazadaConfig } from "./config.js";
 import { signRequest } from "./signature.js";
 import { classifyError, LazadaApiError } from "./errors.js";
+import { TokenManager } from "./token-manager.js";
 
 export type LazadaClient = ReturnType<typeof createLazadaClient>;
 
@@ -15,7 +16,28 @@ interface LazadaRawResponse {
   [k: string]: unknown;
 }
 
-export function createLazadaClient(config: LazadaConfig): ReturnType<typeof createClient<paths>> {
+export function createLazadaClient(
+  config: LazadaConfig,
+  tokenManager?: TokenManager,
+): ReturnType<typeof createClient<paths>> {
+  const tm =
+    tokenManager ??
+    new TokenManager({
+      appKey: config.appKey,
+      appSecret: config.appSecret,
+      ...(config.accessToken !== undefined ? { accessToken: config.accessToken } : {}),
+      ...(config.refreshToken !== undefined ? { refreshToken: config.refreshToken } : {}),
+      ...(config.tokenExpiresAt !== undefined ? { tokenExpiresAt: config.tokenExpiresAt } : {}),
+      ...(config.storage !== undefined ? { storage: config.storage } : {}),
+      ...(config.storageKey !== undefined ? { storageKey: config.storageKey } : {}),
+      ...(config.refreshBufferSec !== undefined
+        ? { refreshBufferSec: config.refreshBufferSec }
+        : {}),
+      ...(config.authBaseUrlOverride !== undefined
+        ? { authBaseUrl: config.authBaseUrlOverride }
+        : {}),
+    });
+
   // Use a placeholder base URL — per-request middleware rewrites to the correct
   // regional or auth host based on the path.
   const client = createClient<paths>({ baseUrl: "https://placeholder.invalid" });
@@ -68,7 +90,13 @@ export function createLazadaClient(config: LazadaConfig): ReturnType<typeof crea
       urlParams.app_key = config.appKey;
       urlParams.timestamp = Date.now().toString();
       urlParams.sign_method = "sha256";
-      if (config.accessToken) urlParams.access_token = config.accessToken;
+
+      // The token endpoint itself must NOT use an access_token (chicken-and-egg).
+      const isAuthExchange = apiPath === "/auth/token/create" || apiPath === "/auth/token/refresh";
+      if (!isAuthExchange) {
+        const token = await tm.getAccessToken();
+        if (token) urlParams.access_token = token;
+      }
 
       urlParams.sign = signRequest({
         appSecret: config.appSecret,
