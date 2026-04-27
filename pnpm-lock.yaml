@@ -16,7 +16,7 @@ importers:
     devDependencies:
       '@size-limit/preset-small-lib':
         specifier: ^11.1.6
-        version: 11.2.0(size-limit@11.2.0)
+        version: 11.2.0(size-limit@12.1.0(jiti@2.6.1))
       '@types/node':
         specifier: ^25.6.0
         version: 25.6.0
@@ -30,8 +30,8 @@ importers:
         specifier: ^7.4.4
         version: 7.13.0(typescript@6.0.3)
       size-limit:
-        specifier: ^11.1.6
-        version: 11.2.0
+        specifier: ^12.1.0
+        version: 12.1.0(jiti@2.6.1)
       tsup:
         specifier: ^8.3.5
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.10)(tsx@4.21.0)(typescript@6.0.3)
@@ -1793,10 +1793,15 @@ packages:
   simple-websocket@9.1.0:
     resolution: {integrity: sha512-8MJPnjRN6A8UCp1I+H/dSFyjwJhp6wta4hsVRhjf8w9qBHRzxYt14RaOcjvQnhD1N4yKOddEjflwMnQM4VtXjQ==}
 
-  size-limit@11.2.0:
-    resolution: {integrity: sha512-2kpQq2DD/pRpx3Tal/qRW1SYwcIeQ0iq8li5CJHQgOC+FtPn2BVmuDtzUCgNnpCrbgtfEHqh+iWzxK+Tq6C+RQ==}
-    engines: {node: ^18.0.0 || >=20.0.0}
+  size-limit@12.1.0:
+    resolution: {integrity: sha512-VnDS2fycANrJFVPQwjaD+h+hkISY7EB3LsPsYWje4lBCjQwwsZLxjwwRwVJKHrcj2ZqyG+DdXykWm9mbZklZrw==}
+    engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
     hasBin: true
+    peerDependencies:
+      jiti: ^2.0.0
+    peerDependenciesMeta:
+      jiti:
+        optional: true
 
   slugify@1.4.7:
     resolution: {integrity: sha512-tf+h5W1IrjNm/9rKKj0JU2MDMruiopx0jjVA5zCdBtcGjfp0+c5rHw/zADLC3IeKlGHtVbHtpfzvYA0OYT+HKg==}
@@ -2700,21 +2705,21 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.2':
     optional: true
 
-  '@size-limit/esbuild@11.2.0(size-limit@11.2.0)':
+  '@size-limit/esbuild@11.2.0(size-limit@12.1.0(jiti@2.6.1))':
     dependencies:
       esbuild: 0.25.12
       nanoid: 5.1.9
-      size-limit: 11.2.0
+      size-limit: 12.1.0(jiti@2.6.1)
 
-  '@size-limit/file@11.2.0(size-limit@11.2.0)':
+  '@size-limit/file@11.2.0(size-limit@12.1.0(jiti@2.6.1))':
     dependencies:
-      size-limit: 11.2.0
+      size-limit: 12.1.0(jiti@2.6.1)
 
-  '@size-limit/preset-small-lib@11.2.0(size-limit@11.2.0)':
+  '@size-limit/preset-small-lib@11.2.0(size-limit@12.1.0(jiti@2.6.1))':
     dependencies:
-      '@size-limit/esbuild': 11.2.0(size-limit@11.2.0)
-      '@size-limit/file': 11.2.0(size-limit@11.2.0)
-      size-limit: 11.2.0
+      '@size-limit/esbuild': 11.2.0(size-limit@12.1.0(jiti@2.6.1))
+      '@size-limit/file': 11.2.0(size-limit@12.1.0(jiti@2.6.1))
+      size-limit: 12.1.0(jiti@2.6.1)
 
   '@standard-schema/spec@1.1.0': {}
 
@@ -3155,7 +3160,8 @@ snapshots:
       html-escaper: 2.0.2
       istanbul-lib-report: 3.0.1
 
-  jiti@2.6.1: {}
+  jiti@2.6.1:
+    optional: true
 
   joycon@3.1.1: {}
 
@@ -3916,15 +3922,15 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  size-limit@11.2.0:
+  size-limit@12.1.0(jiti@2.6.1):
     dependencies:
       bytes-iec: 3.1.1
-      chokidar: 4.0.3
-      jiti: 2.6.1
       lilconfig: 3.1.3
       nanospinner: 1.2.2
       picocolors: 1.1.1
       tinyglobby: 0.2.16
+    optionalDependencies:
+      jiti: 2.6.1
 
   slugify@1.4.7: {}
 
