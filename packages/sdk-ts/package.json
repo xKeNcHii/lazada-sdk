@@ -55,7 +55,7 @@
     "size-limit": "^11.1.6",
     "tsup": "^8.3.5",
     "typescript": "^6.0.3",
-    "vite": "^6.0.0",
+    "vite": "^8.0.10",
     "vitest": "^4.1.4"
   },
   "engines": {
